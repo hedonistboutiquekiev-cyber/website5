@@ -1,3 +1,4 @@
+
 <header class="site-header">
   <div class="header-inner">
 
@@ -7,18 +8,23 @@
       <span>AlbaSpace</span>
     </a>
 
+    <!-- BURGER -->
+    <button class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+      <span class="menu-label">MENU</span>
+    </button>
+
     <!-- Navigation -->
     <nav class="main-nav">
       <a href="/eng/index.html">HOME</a>
       <a href="/eng/atlas.html">ATLAS</a>
       <a href="/eng/hakkimizda.html">ABOUT US</a>
       <a href="/eng/hizmetler.html">SERVICES</a>
-      <a href="/eng/shop.html">SHOP</a>
-      <a href="/eng/blog.html">BLOG</a>
+
+
       <a href="/eng/basindabiz.html">PRESS</a>
       <a href="/eng/galeri.html">GALLERY</a>
       <a href="/eng/iletisim.html">CONTACT</a>
-      <a href="/eng/dfs.html">DFS</a>
+
     </nav>
 
     <!-- Social icons -->
@@ -43,13 +49,11 @@
         </svg>
       </a>
 
-      <!-- X -->
-      <a href="https://x.com/" target="_blank" aria-label="X">
-        <svg class="social-icon-svg" viewBox="0 0 24 24">
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-        </svg>
+      <!-- WhatsApp -->
+      <a href="https://wa.me/905387781018" target="_blank" aria-label="WhatsApp">
+        <img src="/assets/icons/watsupp.png" alt="WhatsApp">
       </a>
+
 
       <!-- YouTube -->
       <a href="https://www.youtube.com/results?search_query=albaspace" target="_blank" aria-label="YouTube">
@@ -59,22 +63,20 @@
         </svg>
       </a>
 
-      <!-- WhatsApp -->
-      <a href="https://wa.me/905387781018" target="_blank" aria-label="WhatsApp">
-        <svg class="social-icon-svg" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"></circle>
-          <path d="M9 9.5c0 3 3 5.5 5.5 5.5l1.5-1.2c.3-.3.8-.2 1 .2l.7 1.3c.2.4.1.9-.3 1.2-1.1.8-2.4 1.2-3.7 1.2-3.9 0-7-3.1-7-7 0-1.3.4-2.6 1.2-3.7.3-.4.8-.5 1.2-.3l1.3.7c.4.2.5.7.2 1L9 9.5z"
-                fill="none" stroke-width="1.5"></path>
-        </svg>
-      </a>
-
     </div>
 
     <!-- Language switch -->
     <div class="top-lang-switch">
-      <a href="/index.html" data-lang="tr">TR</a>
-      <a href="/eng/index.html" data-lang="en">EN</a>
+      <a href="/index.html" data-lang="tr" class="lang-flag" aria-label="Türkçe">
+        <img src="/assets/icons/flag-tr.png" alt="Türkçe" />
+      </a>
+
+      <a href="/eng/index.html" data-lang="en" class="lang-flag" aria-label="English">
+        <img src="/assets/icons/flag-us.png" alt="English" />
+      </a>
     </div>
 
   </div>
 </header>
+
+<script src="/assets/js/menu-toggle.js" defer></script>

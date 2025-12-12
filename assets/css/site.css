@@ -116,6 +116,14 @@ body{
   transition:transform .15s,filter .2s;
 }
 
+/* Force header social icons to use header text color (avoid accidental accent blue) */
+.site-header .header-social a,
+.site-header .header-social svg.social-icon-svg {
+  color: #e5e7eb !important;
+  stroke: #e5e7eb !important;
+  fill: none !important;
+}
+
 .header-social a:hover img,
 .header-social a:hover svg.social-icon-svg{
   transform:translateY(-1px);
