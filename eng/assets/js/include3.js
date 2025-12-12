@@ -407,21 +407,6 @@ function toTrPath(path) {
       </div>
     `;
     document.body.appendChild(overlay);
-    // Adjust overlay position/size to match the model-viewer element
-    try {
-      const rect = viewer.getBoundingClientRect();
-      // Position overlay absolutely over the model-viewer area
-      overlay.style.position = "absolute";
-      overlay.style.top = (rect.top + window.scrollY) + "px";
-      overlay.style.left = (rect.left + window.scrollX) + "px";
-      overlay.style.width = rect.width + "px";
-      overlay.style.height = rect.height + "px";
-      // Reset right/bottom to avoid full-screen sizing
-      overlay.style.right = "auto";
-      overlay.style.bottom = "auto";
-    } catch (err) {
-      console.warn("Failed to resize loading overlay:", err);
-    }
     const progressFill = overlay.querySelector(".progress-fill");
     const hideOverlay = () => {
       if (overlay.classList.contains("fade-out")) return;
