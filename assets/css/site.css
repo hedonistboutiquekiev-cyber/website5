@@ -105,7 +105,19 @@ body{
   transition:transform .15s,filter .2s;
 }
 
-.header-social a:hover img{
+.header-social svg.social-icon-svg{
+  width:22px;
+  height:22px;
+  display:block;
+  stroke:currentColor;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none;
+  transition:transform .15s,filter .2s;
+}
+
+.header-social a:hover img,
+.header-social a:hover svg.social-icon-svg{
   transform:translateY(-1px);
   filter:brightness(1.2);
 }

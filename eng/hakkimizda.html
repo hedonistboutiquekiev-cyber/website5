@@ -107,6 +107,34 @@ body {
       padding:4px;
       border-radius:999px;
     }
+.header-social {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+.header-social img {
+      width: 22px;
+      height: 22px;
+      display: block;
+      border-radius: 6px;
+      transition: transform 0.15s, filter 0.2s;
+    }
+.header-social svg.social-icon-svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      color: #e5e7eb;
+      transition: transform 0.15s, filter 0.2s;
+    }
+.header-social a:hover img,
+.header-social a:hover svg.social-icon-svg {
+      transform: translateY(-1px);
+      filter: brightness(1.2);
+    }
 </style>
 
   <link rel="stylesheet" href="/assets/css/site.css" />
