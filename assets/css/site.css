@@ -117,11 +117,9 @@ body{
 }
 
 /* Force header social icons to use header text color (avoid accidental accent blue) */
-.site-header .header-social a,
 .site-header .header-social svg.social-icon-svg {
   color: #e5e7eb !important;
   stroke: #e5e7eb !important;
-  fill: none !important;
 }
 
 .header-social a:hover img,
