@@ -427,20 +427,21 @@ function toTrPath(path) {
       </div>
     `;
     document.body.appendChild(overlay);
-    // Resize the loading overlay to match the model-viewer's dimensions on all pages.
-    // Rather than covering the entire screen, the overlay will overlay exactly
-    // the <model-viewer> element. This behaviour now applies to both Turkish
-    // and English pages so that the loading card does not obscure the whole page.
+    // If this is an English page, resize the loading overlay to match the
+    // model-viewer's dimensions instead of covering the full screen. This
+    // ensures the preloader appears only over the 3D viewer on /eng/ pages.
     try {
-      const rect = viewer.getBoundingClientRect();
-      overlay.style.position = "absolute";
-      overlay.style.top = (rect.top + window.scrollY) + "px";
-      overlay.style.left = (rect.left + window.scrollX) + "px";
-      overlay.style.width = rect.width + "px";
-      overlay.style.height = rect.height + "px";
-      // reset right/bottom so the overlay doesn't fill the screen
-      overlay.style.right = "auto";
-      overlay.style.bottom = "auto";
+      if (window.location.pathname.startsWith("/eng/")) {
+        const rect = viewer.getBoundingClientRect();
+        overlay.style.position = "absolute";
+        overlay.style.top = (rect.top + window.scrollY) + "px";
+        overlay.style.left = (rect.left + window.scrollX) + "px";
+        overlay.style.width = rect.width + "px";
+        overlay.style.height = rect.height + "px";
+        // reset right/bottom so the overlay doesn't fill the screen
+        overlay.style.right = "auto";
+        overlay.style.bottom = "auto";
+      }
     } catch (e) {
       console.warn("Could not adjust preloader size:", e);
     }

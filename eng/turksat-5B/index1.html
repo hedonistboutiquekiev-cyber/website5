@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TURKSAT 5B – Alba Space</title>
+  <title>TÜRKSAT 5B – Alba Space</title>
   <link rel="icon" type="image/png" href="/favicon.png" />
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
@@ -18,6 +18,45 @@ body {
     }
 @keyframes fadeIn {
       to { opacity:1; }
+    }
+.logo {
+      position:fixed; top:16px; left:16px; z-index:100;
+    }
+.logo img {
+      width:70px; border-radius:50%; box-shadow:0 0 10px rgba(0,0,0,0.6);
+    }
+.top-bar {
+      position:fixed;
+      top:16px;
+      right:16px;
+      z-index:90;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:8px;
+    }
+.lang-switch button {
+      border:none;
+      padding:4px 10px;
+      margin-left:4px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.6);
+      color:#fff;
+      cursor:pointer;
+      font-size:12px;
+    }
+.lang-switch button.active {
+      background:#00b4ff;
+      color:#000;
+      font-weight:bold;
+    }
+nav.main-nav {
+      background:rgba(0,0,0,0.55);
+      border-radius:999px;
+      padding:6px 14px;
+      display:flex;
+      gap:10px;
+      box-shadow:0 0 18px rgba(0,0,0,0.7);
     }
 h1 {
       text-align:center;
@@ -51,12 +90,13 @@ model-viewer {
 @media (max-width:768px) {
       h1 { font-size:26px; margin-top:90px; }
       model-viewer { height:420px; }
+      nav.main-nav { flex-wrap:wrap; justify-content:flex-end; }
     }
-  </style>
+</style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const params = new URLSearchParams(window.location.search);
-      const lang = params.get('lang') || 'en';
+      const lang = params.get('lang') || 'tr';
       document.documentElement.lang = lang;
       const trBtn = document.getElementById('lang-tr');
       const enBtn = document.getElementById('lang-en');
@@ -76,15 +116,24 @@ model-viewer {
       }
     });
   </script>
+
   <link rel="stylesheet" href="/assets/css/site.css" />
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
 </head>
 <body>
   <div data-include="/header-en.html"></div>
-  <h1 style="margin-top: 20px;">TURKSAT 5B</h1>
+
+  
+
+  
+    
+  </div>
+
+  <h1 style="margin-top: 20px;">TÜRKSAT 5B</h1>
+
   <div class="container">
-    <p>TURKSAT 5B is a high-throughput satellite focused on broadband Internet services with its high data capacity.</p>
+    <p>TÜRKSAT 5B, yüksek veri kapasitesiyle geniş bant internet hizmetlerine odaklanan bir haberleşme uydusudur.</p>
     <model-viewer src="/assets/models/turksat-5B.glb" camera-controls ar ar-modes="webxr scene-viewer quick-look"></model-viewer>
   </div>
   <div data-include="/footer-en.html"></div>
