@@ -1,20 +1,19 @@
-// Unified include.js for AlbaSpace website (Turkish)
+// Unified include.js for AlbaSpace website (English)
 //
 // This script handles dynamic loading of header/footer fragments,
-// highlights the current page in the navigation, enables language
-// switching between TR and EN, and injects a futuristic preloader
-// on pages containing a <model-viewer> element. It consolidates
-// duplicate logic found in the original include.js and prevents
-// multiple DOMContentLoaded handlers from conflicting.
+// highlights the current page in the navigation, optionally enables
+// language switching, and injects a futuristic preloader on pages
+// containing a <model-viewer> element. It consolidates logic to
+// prevent duplicated event handlers and ensures consistent behavior
+// across English pages.
 
 document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
   if (!includes.length) return;
 
-  // Вставляем CSS-правила для мобильной навигации, чтобы меню-бургер корректно
-  // работало на страницах, где nav.main-nav определён с большей специфичностью.
-  // Эти стили скрывают меню на мобильных по умолчанию и показывают его только
-  // когда добавлен класс nav-open.
+  // Inject mobile navigation override to ensure burger menu functions correctly on pages
+  // that define nav.main-nav with higher specificity (e.g. many /eng/ pages). This
+  // rule hides nav by default on small screens and displays it only when nav-open is set.
   if (!document.getElementById("albaspace-nav-override-style")) {
     const navStyle = document.createElement("style");
     navStyle.id = "albaspace-nav-override-style";
@@ -65,8 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(navStyle);
   }
-
-  // Fetch and insert external fragments (header/footer)
   const loadFragment = (el) => {
     const url = el.getAttribute("data-include");
     if (!url) return;
@@ -77,9 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then((html) => {
         el.innerHTML = html;
-        // After inserting the header, update navigation and language switch
         if (url.includes("header-")) {
           markActiveNav();
+          // English pages may optionally include a language switcher
           setupLangSwitch();
         }
       })
@@ -87,11 +84,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error(err);
       });
   };
-
   includes.forEach(loadFragment);
 });
 
-// Highlight the current page's link in the navigation menu
 function markActiveNav() {
   const path = window.location.pathname || "/";
   const normalized = normalizePath(path);
@@ -108,14 +103,12 @@ function markActiveNav() {
         matched = true;
       }
     } catch (e) {
-      // For relative URLs
       if (normalized.endsWith(href)) {
         link.classList.add("active");
         matched = true;
       }
     }
   });
-  // If nothing matched, default to highlighting an ATLAS link
   if (!matched) {
     navLinks.forEach((link) => {
       const text = (link.textContent || "").trim().toUpperCase();
@@ -126,19 +119,18 @@ function markActiveNav() {
   }
 }
 
-// Normalize a URL path by ensuring it ends with '/' or '.html'
 function normalizePath(path) {
-  if (!path) return "/index.html";
-  if (path === "/") return "/index.html";
+  if (!path) return "/eng/index.html";
+  if (path === "/eng" || path === "/eng/") return "/eng/index.html";
   if (!path.endsWith(".html") && !path.endsWith("/")) {
     return path + "/";
   }
   return path;
 }
 
-// Initialize language switcher buttons
 function setupLangSwitch() {
   const path = window.location.pathname || "/";
+  // Determine if current page is English; for English pages, we highlight EN flag
   const isEn = path.startsWith("/eng/");
   const currentLang = isEn ? "en" : "tr";
   const container = document.querySelector(".top-lang-switch");
@@ -160,43 +152,31 @@ function setupLangSwitch() {
   });
 }
 
-// Compute path to English version of the current page
 function toEnPath(path) {
   path = normalizePath(path);
   if (path.startsWith("/eng/")) return path;
-  if (path === "/index.html") {
-    return "/eng/index.html";
-  }
+  if (path === "/index.html") return "/eng/index.html";
   return "/eng" + (path.startsWith("/") ? path : "/" + path);
 }
 
-// Compute path to Turkish version of the current page
 function toTrPath(path) {
   path = normalizePath(path);
   if (!path.startsWith("/eng/")) return path;
-  // Remove '/eng' prefix; fallback to '/index.html' if empty
   const tr = path.replace(/^\/eng/, "") || "/index.html";
   return tr;
 }
 
 /* ----------------------------------------------------------------------
-   Futuristic AlbaSpace Preloader Injection
+   Futuristic AlbaSpace Preloader Injection (English version)
 
-   Pages using <model-viewer> can take a noticeable amount of time to
-   download and initialize 3D models. To improve user experience, we
-   automatically inject a futuristic loading overlay similar to the one
-   used on the Mars page. This code runs after DOMContentLoaded and
-   attaches itself only if a model-viewer exists on the page and no
-   preloader has been defined manually.
+   Adds a sci‑fi loading overlay for pages with a <model-viewer> element.
+   It mirrors the design used on the Mars page but uses English copy.
 ---------------------------------------------------------------------- */
 (function() {
   document.addEventListener("DOMContentLoaded", () => {
-    // Only proceed if there is at least one model-viewer on the page
     const viewer = document.querySelector("model-viewer");
     if (!viewer) return;
-    // Do not inject if a custom overlay already exists
     if (document.getElementById("loading-overlay")) return;
-    // Inject styles once per page
     if (!document.getElementById("albaspace-preloader-style")) {
       const style = document.createElement("style");
       style.id = "albaspace-preloader-style";
@@ -402,7 +382,7 @@ function toTrPath(path) {
       `;
       document.head.appendChild(style);
     }
-    // Create overlay DOM structure
+    // Create overlay with English copy
     const overlay = document.createElement("div");
     overlay.id = "loading-overlay";
     overlay.innerHTML = `
@@ -415,38 +395,34 @@ function toTrPath(path) {
           <div class="orb-ring"></div>
           <div class="orb-core"></div>
         </div>
-        <p class="loading-text">Lütfen bekleyin, 3D model telefonunuza yükleniyor…</p>
-        <p class="loading-subtext">Bu işlem internet hızınıza göre birkaç saniye sürebilir.</p>
+        <p class="loading-text">Please wait, the 3D model is loading to your device…</p>
+        <p class="loading-subtext">This process may take a few seconds depending on your internet speed.</p>
         <div class="progress-shell">
           <div class="progress-bar">
             <div class="progress-fill"></div>
           </div>
           <div class="progress-glow"></div>
         </div>
-        <div class="overlay-hint">AR &amp; 3D deneyimi hazırlanıyor</div>
+        <div class="overlay-hint">Preparing AR &amp; 3D experience</div>
       </div>
     `;
     document.body.appendChild(overlay);
-    // If this is an English page, resize the loading overlay to match the
-    // model-viewer's dimensions instead of covering the full screen. This
-    // ensures the preloader appears only over the 3D viewer on /eng/ pages.
+    // Adjust overlay position/size to match the model-viewer element
     try {
-      if (window.location.pathname.startsWith("/eng/")) {
-        const rect = viewer.getBoundingClientRect();
-        overlay.style.position = "absolute";
-        overlay.style.top = (rect.top + window.scrollY) + "px";
-        overlay.style.left = (rect.left + window.scrollX) + "px";
-        overlay.style.width = rect.width + "px";
-        overlay.style.height = rect.height + "px";
-        // reset right/bottom so the overlay doesn't fill the screen
-        overlay.style.right = "auto";
-        overlay.style.bottom = "auto";
-      }
-    } catch (e) {
-      console.warn("Could not adjust preloader size:", e);
+      const rect = viewer.getBoundingClientRect();
+      // Position overlay absolutely over the model-viewer area
+      overlay.style.position = "absolute";
+      overlay.style.top = (rect.top + window.scrollY) + "px";
+      overlay.style.left = (rect.left + window.scrollX) + "px";
+      overlay.style.width = rect.width + "px";
+      overlay.style.height = rect.height + "px";
+      // Reset right/bottom to avoid full-screen sizing
+      overlay.style.right = "auto";
+      overlay.style.bottom = "auto";
+    } catch (err) {
+      console.warn("Failed to resize loading overlay:", err);
     }
     const progressFill = overlay.querySelector(".progress-fill");
-    // Helper to fade out and remove overlay
     const hideOverlay = () => {
       if (overlay.classList.contains("fade-out")) return;
       overlay.classList.add("fade-out");
@@ -456,7 +432,6 @@ function toTrPath(path) {
         }
       }, 550);
     };
-    // Update progress bar based on model viewer progress
     viewer.addEventListener("progress", (event) => {
       const total = event.detail && typeof event.detail.totalProgress === "number"
         ? event.detail.totalProgress
@@ -466,12 +441,10 @@ function toTrPath(path) {
         progressFill.style.width = percent + "%";
       }
     });
-    // On model load, fill progress bar and hide overlay shortly after
     viewer.addEventListener("load", () => {
       progressFill.style.width = "100%";
       setTimeout(hideOverlay, 250);
     });
-    // Ensure overlay hides after a maximum of 20 seconds (fallback)
     setTimeout(hideOverlay, 20000);
   });
 })();
