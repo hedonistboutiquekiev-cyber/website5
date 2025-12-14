@@ -14,11 +14,7 @@
       --text-muted:#9ca3af;
     }
 
-    * {
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -66,10 +62,7 @@
       color:#22c55e;
     }
 
-    .atlas-hero-title {
-      font-size:22px;
-      margin-bottom:4px;
-    }
+    .atlas-hero-title { font-size:22px; margin-bottom:4px; }
 
     .atlas-hero-sub {
       font-size:13px;
@@ -93,9 +86,7 @@
       font-size:12px;
     }
 
-    .filters span.label {
-      color:#9ca3af;
-    }
+    .filters span.label { color:#9ca3af; }
 
     .chip {
       padding:4px 10px;
@@ -105,6 +96,7 @@
       color:#e5e7eb;
       cursor:pointer;
       transition:background .15s,border-color .15s,transform .1s;
+      user-select:none;
     }
 
     .chip:hover {
@@ -128,15 +120,11 @@
     }
 
     @media (max-width:900px){
-      section.grid {
-        grid-template-columns:repeat(2,minmax(0,1fr));
-      }
+      section.grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
 
     @media (max-width:600px){
-      section.grid {
-        grid-template-columns:repeat(1,minmax(0,1fr));
-      }
+      section.grid { grid-template-columns:repeat(1,minmax(0,1fr)); }
     }
 
     .card {
@@ -171,11 +159,7 @@
       color:#a5b4fc;
     }
 
-    .card h2 {
-      font-size:15px;
-      font-weight:600;
-      color:#e5e7eb;
-    }
+    .card h2 { font-size:15px; font-weight:600; color:#e5e7eb; }
 
     .card p {
       font-size:12px;
@@ -208,258 +192,261 @@
           Her kart, ilgili objenin özel 3D sayfasını açar.
         </p>
 
-        <div class="filters">
+        <!-- ФИЛЬТРЫ (исправлено: добавлены data-filter + доступность) -->
+        <div class="filters" aria-label="Kategoriler">
           <span class="label">Kategoriler:</span>
-          <div class="chip active">Tümü</div>
-          <div class="chip">Türk Uyduları</div>
-          <div class="chip">Gezegenler</div>
-          <div class="chip">Mars Araçları</div>
-          <div class="chip">Teleskoplar &amp; Problar</div>
+
+          <div class="chip active" data-filter="all" role="button" tabindex="0">Tümü</div>
+          <div class="chip" data-filter="turk" role="button" tabindex="0">Türk Uyduları</div>
+          <div class="chip" data-filter="gezegen" role="button" tabindex="0">Gezegenler</div>
+          <div class="chip" data-filter="mars" role="button" tabindex="0">Mars Araçları</div>
+          <div class="chip" data-filter="teleskop" role="button" tabindex="0">Teleskoplar &amp; Problar</div>
         </div>
 
-        <!-- КАРТОЧКИ -->
+        <!-- КАРТОЧКИ (исправлено: добавлены data-category) -->
         <section class="grid">
 
           <!-- Turkish Satellites -->
-          <a class="card" href="gokturk-1/">
+          <a class="card" data-category="turk" href="gokturk-1/">
             <div class="tag">Uydu</div>
             <h2>GÖKTÜRK-1</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="gokturk-2/">
+          <a class="card" data-category="turk" href="gokturk-2/">
             <div class="tag">Uydu</div>
             <h2>GÖKTÜRK-2</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="rasat/">
+          <a class="card" data-category="turk" href="rasat/">
             <div class="tag">Uydu</div>
             <h2>RASAT</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="imece/">
+          <a class="card" data-category="turk" href="imece/">
             <div class="tag">Uydu</div>
             <h2>İMECE</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-1A/">
+          <a class="card" data-category="turk" href="turksat-1A/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 1A</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-1B/">
+          <a class="card" data-category="turk" href="turksat-1B/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 1B</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-1C/">
+          <a class="card" data-category="turk" href="turksat-1C/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 1C</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-2A/">
+          <a class="card" data-category="turk" href="turksat-2A/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 2A</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-3A/">
+          <a class="card" data-category="turk" href="turksat-3A/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 3A</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-3B/">
+          <a class="card" data-category="turk" href="turksat-3B/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 3B</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-4A/">
+          <a class="card" data-category="turk" href="turksat-4A/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 4A</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-5A/">
+          <a class="card" data-category="turk" href="turksat-5A/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 5A</h2>
-            <p>Ayrıntılı bilgi için тıklayın.</p>
+            <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-5B/">
+          <a class="card" data-category="turk" href="turksat-5B/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 5B</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="turksat-6A/">
+          <a class="card" data-category="turk" href="turksat-6A/">
             <div class="tag">Uydu</div>
             <h2>TÜRKSAT 6A</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <a class="card" href="lagari/">
+          <a class="card" data-category="turk" href="lagari/">
             <div class="tag">Uydu</div>
             <h2>Lagari</h2>
             <p>Ayrıntılı bilgi için tıklayın.</p>
           </a>
 
-          <!-- Space Station -->
-          <a class="card" href="iss/">
+          <!-- Space Station (пусть идет в "Türk Uyduları", чтобы не пропадала при фильтрах) -->
+          <a class="card" data-category="turk" href="iss/">
             <div class="tag">İstasyon</div>
             <h2>Uluslararası Uzay İstasyonu</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
           <!-- Planets -->
-          <a class="card" href="mercury/">
+          <a class="card" data-category="gezegen" href="mercury/">
             <div class="tag">Gezegen</div>
             <h2>Merkür</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="venus/">
+          <a class="card" data-category="gezegen" href="venus/">
             <div class="tag">Gezegen</div>
             <h2>Venüs</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="earth/">
+          <a class="card" data-category="gezegen" href="earth/">
             <div class="tag">Gezegen</div>
             <h2>Dünya</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="mars/">
+          <a class="card" data-category="gezegen" href="mars/">
             <div class="tag">Gezegen</div>
             <h2>Mars</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="jupiter/">
+          <a class="card" data-category="gezegen" href="jupiter/">
             <div class="tag">Gezegen</div>
             <h2>Jüpiter</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="saturn/">
+          <a class="card" data-category="gezegen" href="saturn/">
             <div class="tag">Gezegen</div>
             <h2>Satürn</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="uranus/">
+          <a class="card" data-category="gezegen" href="uranus/">
             <div class="tag">Gezegen</div>
             <h2>Uranüs</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="neptune/">
+          <a class="card" data-category="gezegen" href="neptune/">
             <div class="tag">Gezegen</div>
             <h2>Neptün</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
           <!-- Probes / telescopes -->
-          <a class="card" href="sputnik/">
+          <a class="card" data-category="teleskop" href="sputnik/">
             <div class="tag">Uydu</div>
             <h2>Sputnik</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="voyager1/">
+          <a class="card" data-category="teleskop" href="voyager1/">
             <div class="tag">Sonda</div>
             <h2>Voyager 1</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="voyager2/">
+          <a class="card" data-category="teleskop" href="voyager2/">
             <div class="tag">Sonda</div>
             <h2>Voyager 2</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="hubble/">
+          <a class="card" data-category="teleskop" href="hubble/">
             <div class="tag">Teleskop</div>
             <h2>Hubble Uzay Teleskobu</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="jameswebb/">
+          <a class="card" data-category="teleskop" href="jameswebb/">
             <div class="tag">Teleskop</div>
             <h2>James Webb Uzay Teleskobu</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="kepler/">
+          <a class="card" data-category="teleskop" href="kepler/">
             <div class="tag">Teleskop</div>
             <h2>Kepler Uzay Teleskobu</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="exomars/">
+          <!-- Mars Missions -->
+          <a class="card" data-category="mars" href="exomars/">
             <div class="tag">Görev</div>
             <h2>ExoMars</h2>
             <p>Görev detayları için tıklayın.</p>
           </a>
 
-          <a class="card" href="marsodyssey/">
+          <a class="card" data-category="mars" href="marsodyssey/">
             <div class="tag">Görev</div>
             <h2>Mars Odyssey</h2>
             <p>Görev detayları için tıklayın.</p>
           </a>
 
-          <a class="card" href="marsreconnaissance/">
+          <a class="card" data-category="mars" href="marsreconnaissance/">
             <div class="tag">Görev</div>
             <h2>Mars Reconnaissance Orbiter</h2>
             <p>Görev detayları için tıklayın.</p>
           </a>
 
           <!-- Mars Rovers -->
-          <a class="card" href="perseverance/">
+          <a class="card" data-category="mars" href="perseverance/">
             <div class="tag">Rover</div>
             <h2>Perseverance</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="curiosity/">
+          <a class="card" data-category="mars" href="curiosity/">
             <div class="tag">Rover</div>
             <h2>Curiosity</h2>
             <p>3D görünüm için tıklayın.</p>
           </a>
 
-          <a class="card" href="ingenuity/">
+          <a class="card" data-category="mars" href="ingenuity/">
             <div class="tag">Helikopter</div>
             <h2>Ingenuity</h2>
             <p>Görev detayları için tıklayın.</p>
           </a>
 
-          <a class="card" href="opportunity/">
+          <a class="card" data-category="mars" href="opportunity/">
             <div class="tag">Rover</div>
             <h2>Opportunity</h2>
             <p>Görev detayları için tıklayın.</p>
           </a>
 
-          <a class="card" href="sojourner/">
+          <a class="card" data-category="mars" href="sojourner/">
             <div class="tag">Rover</div>
             <h2>Sojourner</h2>
             <p>Görev detayları için tıklayın.</p>
           </a>
 
-          <a class="card" href="spirit/">
+          <a class="card" data-category="mars" href="spirit/">
             <div class="tag">Rover</div>
             <h2>Spirit</h2>
             <p>Görev detayları için tıklayın.</p>
           </a>
 
-          <a class="card" href="zhurong/">
+          <a class="card" data-category="mars" href="zhurong/">
             <div class="tag">Rover</div>
             <h2>Zhurong</h2>
             <p>3D görünüm için tıklayın.</p>
@@ -473,5 +460,43 @@
 
   <!-- ГЛОБАЛЬНЫЙ ФУТЕР -->
   <div data-include="/footer-tr.html"></div>
+
+  <!-- JS ФИЛЬТРАЦИИ (исправлено: добавлена логика сортировки) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chips = Array.from(document.querySelectorAll('.filters .chip[data-filter]'));
+      const cards = Array.from(document.querySelectorAll('.grid .card[data-category]'));
+
+      if (!chips.length || !cards.length) return;
+
+      const apply = (filter) => {
+        const f = String(filter || 'all').toLowerCase();
+
+        chips.forEach(c => c.classList.toggle('active', c.dataset.filter === f));
+
+        cards.forEach(card => {
+          const cat = String(card.dataset.category || '').toLowerCase();
+          const show = (f === 'all') || (cat === f);
+          card.style.display = show ? '' : 'none';
+        });
+      };
+
+      const onActivate = (chip) => apply(chip.dataset.filter);
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => onActivate(chip));
+        chip.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onActivate(chip);
+          }
+        });
+      });
+
+      // стартовое состояние
+      const active = chips.find(c => c.classList.contains('active')) || chips[0];
+      apply(active?.dataset.filter || 'all');
+    });
+  </script>
 </body>
 </html>

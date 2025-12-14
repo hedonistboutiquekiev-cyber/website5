@@ -415,15 +415,15 @@ function toTrPath(path) {
           <div class="orb-ring"></div>
           <div class="orb-core"></div>
         </div>
-        <p class="loading-text">Lütfen bekleyin, 3D model telefonunuza yükleniyor…</p>
-        <p class="loading-subtext">Bu işlem internet hızınıza göre birkaç saniye sürebilir.</p>
+        <p class="loading-text">Please wait, the 3D model is loading onto your phone…</p>
+        <p class="loading-subtext">This process may take a few seconds depending on your internet speed.</p>
         <div class="progress-shell">
           <div class="progress-bar">
             <div class="progress-fill"></div>
           </div>
           <div class="progress-glow"></div>
         </div>
-        <div class="overlay-hint">AR &amp; 3D deneyimi hazırlanıyor</div>
+        <div class="overlay-hint">AR &amp; 33D experience is being prepared.</div>
       </div>
     `;
     document.body.appendChild(overlay);
