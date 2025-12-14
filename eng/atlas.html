@@ -92,6 +92,7 @@ body {
       color:#e5e7eb;
       cursor:pointer;
       transition:background .15s,border-color .15s,transform .1s;
+      user-select:none;
     }
 .chip:hover {
       background:rgba(30,64,175,0.8);
@@ -110,6 +111,13 @@ section.grid {
       grid-template-columns:repeat(3,minmax(0,1fr));
       gap:10px;
     }
+@media (max-width:900px){
+      section.grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+@media (max-width:600px){
+      section.grid { grid-template-columns:repeat(1,minmax(0,1fr)); }
+    }
+
 .card {
       position:relative;
       border-radius:18px;
@@ -205,223 +213,226 @@ section.grid {
           Each card opens a dedicated 3D page for the object.
         </p>
 
-        <div class="filters">
+        <!-- FIXED: added data-filter + accessibility -->
+        <div class="filters" aria-label="Categories">
           <span class="label">Categories:</span>
-          <div class="chip active">All</div>
-          <div class="chip">Turkish Satellites</div>
-          <div class="chip">Planets</div>
-          <div class="chip">Mars Rovers</div>
-          <div class="chip">Telescopes &amp; Probes</div>
+          <div class="chip active" data-filter="all" role="button" tabindex="0">All</div>
+          <div class="chip" data-filter="turk" role="button" tabindex="0">Turkish Satellites</div>
+          <div class="chip" data-filter="gezegen" role="button" tabindex="0">Planets</div>
+          <div class="chip" data-filter="mars" role="button" tabindex="0">Mars Rovers</div>
+          <div class="chip" data-filter="teleskop" role="button" tabindex="0">Telescopes &amp; Probes</div>
         </div>
 
         <!-- CARDS -->
         <section class="grid">
 
           <!-- Turkish Satellites -->
-          <a class="card" href="gokturk-1/">
+          <a class="card" data-category="turk" href="gokturk-1/">
             <div class="tag">Satellite</div>
             <h2>GÖKTÜRK-1</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="gokturk-2/">
+          <a class="card" data-category="turk" href="gokturk-2/">
             <div class="tag">Satellite</div>
             <h2>GÖKTÜRK-2</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="rasat/">
+          <a class="card" data-category="turk" href="rasat/">
             <div class="tag">Satellite</div>
             <h2>RASAT</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="imece/">
+          <a class="card" data-category="turk" href="imece/">
             <div class="tag">Satellite</div>
             <h2>İMECE</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-1A/">
+          <a class="card" data-category="turk" href="turksat-1A/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 1A</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-1B/">
+          <a class="card" data-category="turk" href="turksat-1B/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 1B</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-1C/">
+          <a class="card" data-category="turk" href="turksat-1C/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 1C</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-2A/">
+          <a class="card" data-category="turk" href="turksat-2A/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 2A</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-3A/">
+          <a class="card" data-category="turk" href="turksat-3A/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 3A</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-3B/">
+          <a class="card" data-category="turk" href="turksat-3B/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 3B</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-4A/">
+          <a class="card" data-category="turk" href="turksat-4A/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 4A</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-5A/">
+          <a class="card" data-category="turk" href="turksat-5A/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 5A</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-5B/">
+          <a class="card" data-category="turk" href="turksat-5B/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 5B</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="turksat-6A/">
+          <a class="card" data-category="turk" href="turksat-6A/">
             <div class="tag">Satellite</div>
             <h2>TÜRKSAT 6A</h2>
             <p>Click to see details.</p>
           </a>
-          <a class="card" href="lagari/">
+          <a class="card" data-category="turk" href="lagari/">
             <div class="tag">Rocket</div>
             <h2>Lagari</h2>
             <p>Click to see details.</p>
           </a>
 
-          <!-- Space Station -->
-          <a class="card" href="iss/">
+          <!-- Space Station (kept in Turkish Satellites group so it doesn't disappear) -->
+          <a class="card" data-category="turk" href="iss/">
             <div class="tag">Station</div>
             <h2>International Space Station</h2>
             <p>Click to see 3D view.</p>
           </a>
 
           <!-- Planets -->
-          <a class="card" href="mercury/">
+          <a class="card" data-category="gezegen" href="mercury/">
             <div class="tag">Planet</div>
             <h2>Mercury</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="venus/">
+          <a class="card" data-category="gezegen" href="venus/">
             <div class="tag">Planet</div>
             <h2>Venus</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="earth/">
+          <a class="card" data-category="gezegen" href="earth/">
             <div class="tag">Planet</div>
             <h2>Earth</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="mars/">
+          <a class="card" data-category="gezegen" href="mars/">
             <div class="tag">Planet</div>
             <h2>Mars</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="jupiter/">
+          <a class="card" data-category="gezegen" href="jupiter/">
             <div class="tag">Planet</div>
             <h2>Jupiter</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="saturn/">
+          <a class="card" data-category="gezegen" href="saturn/">
             <div class="tag">Planet</div>
             <h2>Saturn</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="uranus/">
+          <a class="card" data-category="gezegen" href="uranus/">
             <div class="tag">Planet</div>
             <h2>Uranus</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="neptune/">
+          <a class="card" data-category="gezegen" href="neptune/">
             <div class="tag">Planet</div>
             <h2>Neptune</h2>
             <p>Click to see 3D view.</p>
           </a>
 
           <!-- Probes / Telescopes -->
-          <a class="card" href="sputnik/">
+          <a class="card" data-category="teleskop" href="sputnik/">
             <div class="tag">Satellite</div>
             <h2>Sputnik</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="voyager1/">
+          <a class="card" data-category="teleskop" href="voyager1/">
             <div class="tag">Probe</div>
             <h2>Voyager 1</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="voyager2/">
+          <a class="card" data-category="teleskop" href="voyager2/">
             <div class="tag">Probe</div>
             <h2>Voyager 2</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="hubble/">
+          <a class="card" data-category="teleskop" href="hubble/">
             <div class="tag">Telescope</div>
             <h2>Hubble Space Telescope</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="jameswebb/">
+          <a class="card" data-category="teleskop" href="jameswebb/">
             <div class="tag">Telescope</div>
             <h2>James Webb Space Telescope</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="kepler/">
+          <a class="card" data-category="teleskop" href="kepler/">
             <div class="tag">Telescope</div>
             <h2>Kepler Space Telescope</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="exomars/">
+
+          <!-- Mars missions (these belong to Mars Rovers filter in your UI) -->
+          <a class="card" data-category="mars" href="exomars/">
             <div class="tag">Mission</div>
             <h2>ExoMars</h2>
             <p>Click to see mission details.</p>
           </a>
-          <a class="card" href="marsodyssey/">
+          <a class="card" data-category="mars" href="marsodyssey/">
             <div class="tag">Mission</div>
             <h2>Mars Odyssey</h2>
             <p>Click to see mission details.</p>
           </a>
-          <a class="card" href="marsreconnaissance/">
+          <a class="card" data-category="mars" href="marsreconnaissance/">
             <div class="tag">Mission</div>
             <h2>Mars Reconnaissance Orbiter</h2>
             <p>Click to see mission details.</p>
           </a>
 
           <!-- Mars Rovers -->
-          <a class="card" href="perseverance/">
+          <a class="card" data-category="mars" href="perseverance/">
             <div class="tag">Rover</div>
             <h2>Perseverance</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="curiosity/">
+          <a class="card" data-category="mars" href="curiosity/">
             <div class="tag">Rover</div>
             <h2>Curiosity</h2>
             <p>Click to see 3D view.</p>
           </a>
-          <a class="card" href="ingenuity/">
+          <a class="card" data-category="mars" href="ingenuity/">
             <div class="tag">Helicopter</div>
             <h2>Ingenuity</h2>
             <p>Click to see mission details.</p>
           </a>
-          <a class="card" href="opportunity/">
+          <a class="card" data-category="mars" href="opportunity/">
             <div class="tag">Rover</div>
             <h2>Opportunity</h2>
             <p>Click to see mission details.</p>
           </a>
-          <a class="card" href="sojourner/">
+          <a class="card" data-category="mars" href="sojourner/">
             <div class="tag">Rover</div>
             <h2>Sojourner</h2>
             <p>Click to see mission details.</p>
           </a>
-          <a class="card" href="spirit/">
+          <a class="card" data-category="mars" href="spirit/">
             <div class="tag">Rover</div>
             <h2>Spirit</h2>
             <p>Click to see mission details.</p>
           </a>
-          <a class="card" href="zhurong/">
+          <a class="card" data-category="mars" href="zhurong/">
             <div class="tag">Rover</div>
             <h2>Zhurong</h2>
             <p>Click to see 3D view.</p>
@@ -435,5 +446,42 @@ section.grid {
 
   <!-- GLOBAL FOOTER -->
   <div data-include="/footer-en.html"></div>
+
+  <!-- FIXED: filtering logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chips = Array.from(document.querySelectorAll('.filters .chip[data-filter]'));
+      const cards = Array.from(document.querySelectorAll('.grid .card[data-category]'));
+
+      if (!chips.length || !cards.length) return;
+
+      const apply = (filter) => {
+        const f = String(filter || 'all').toLowerCase();
+
+        chips.forEach(c => c.classList.toggle('active', (c.dataset.filter || '').toLowerCase() === f));
+
+        cards.forEach(card => {
+          const cat = String(card.dataset.category || '').toLowerCase();
+          const show = (f === 'all') || (cat === f);
+          card.style.display = show ? '' : 'none';
+        });
+      };
+
+      const activate = (chip) => apply(chip.dataset.filter);
+
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => activate(chip));
+        chip.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            activate(chip);
+          }
+        });
+      });
+
+      const active = chips.find(c => c.classList.contains('active')) || chips[0];
+      apply(active?.dataset.filter || 'all');
+    });
+  </script>
 </body>
 </html>
