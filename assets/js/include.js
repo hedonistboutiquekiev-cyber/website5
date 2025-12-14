@@ -2,19 +2,15 @@
 //
 // This script handles dynamic loading of header/footer fragments,
 // highlights the current page in the navigation, enables language
-// switching between TR and EN, and injects a futuristic preloader
-// on pages containing a <model-viewer> element. It consolidates
-// duplicate logic found in the original include.js and prevents
-// multiple DOMContentLoaded handlers from conflicting.
+// switching between TR and EN, injects a futuristic preloader on pages
+// containing a <model-viewer> element, and enhances the footer globally
+// (addresses split into nice blocks + better socials + responsive layout).
 
 document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
   if (!includes.length) return;
 
-  // Вставляем CSS-правила для мобильной навигации, чтобы меню-бургер корректно
-  // работало на страницах, где nav.main-nav определён с большей специфичностью.
-  // Эти стили скрывают меню на мобильных по умолчанию и показывают его только
-  // когда добавлен класс nav-open.
+  // Mobile nav override styles (burger menu)
   if (!document.getElementById("albaspace-nav-override-style")) {
     const navStyle = document.createElement("style");
     navStyle.id = "albaspace-nav-override-style";
@@ -70,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadFragment = (el) => {
     const url = el.getAttribute("data-include");
     if (!url) return;
+
     fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load " + url + " (" + res.status + ")");
@@ -77,29 +74,35 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then((html) => {
         el.innerHTML = html;
-        // After inserting the header, update navigation and language switch
+
+        // After inserting header: update navigation + language switch
         if (url.includes("header-")) {
           markActiveNav();
           setupLangSwitch();
         }
+
+        // After inserting footer: enhance globally
+        if (url.includes("footer-")) {
+          enhanceFooter(el);
+        }
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => console.error(err));
   };
 
   includes.forEach(loadFragment);
 });
 
-// Highlight the current page's link in the navigation menu
+// --------------------------- NAV ACTIVE ---------------------------
 function markActiveNav() {
   const path = window.location.pathname || "/";
   const normalized = normalizePath(path);
   const navLinks = document.querySelectorAll(".main-nav a");
   let matched = false;
+
   navLinks.forEach((link) => {
     const href = link.getAttribute("href");
     if (!href) return;
+
     try {
       const linkUrl = new URL(href, window.location.origin);
       const linkPath = normalizePath(linkUrl.pathname);
@@ -115,42 +118,37 @@ function markActiveNav() {
       }
     }
   });
+
   // If nothing matched, default to highlighting an ATLAS link
   if (!matched) {
     navLinks.forEach((link) => {
       const text = (link.textContent || "").trim().toUpperCase();
-      if (text.includes("ATLAS")) {
-        link.classList.add("active");
-      }
+      if (text.includes("ATLAS")) link.classList.add("active");
     });
   }
 }
 
-// Normalize a URL path by ensuring it ends with '/' or '.html'
 function normalizePath(path) {
   if (!path) return "/index.html";
   if (path === "/") return "/index.html";
-  if (!path.endsWith(".html") && !path.endsWith("/")) {
-    return path + "/";
-  }
+  if (!path.endsWith(".html") && !path.endsWith("/")) return path + "/";
   return path;
 }
 
-// Initialize language switcher buttons
+// --------------------------- LANG SWITCH ---------------------------
 function setupLangSwitch() {
   const path = window.location.pathname || "/";
   const isEn = path.startsWith("/eng/");
   const currentLang = isEn ? "en" : "tr";
   const container = document.querySelector(".top-lang-switch");
   if (!container) return;
+
   const buttons = container.querySelectorAll("[data-lang]");
   buttons.forEach((btn) => {
     const lang = btn.getAttribute("data-lang");
-    if (lang === currentLang) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
+    if (lang === currentLang) btn.classList.add("active");
+    else btn.classList.remove("active");
+
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       if (lang === currentLang) return;
@@ -160,43 +158,201 @@ function setupLangSwitch() {
   });
 }
 
-// Compute path to English version of the current page
 function toEnPath(path) {
   path = normalizePath(path);
   if (path.startsWith("/eng/")) return path;
-  if (path === "/index.html") {
-    return "/eng/index.html";
-  }
+  if (path === "/index.html") return "/eng/index.html";
   return "/eng" + (path.startsWith("/") ? path : "/" + path);
 }
 
-// Compute path to Turkish version of the current page
 function toTrPath(path) {
   path = normalizePath(path);
   if (!path.startsWith("/eng/")) return path;
-  // Remove '/eng' prefix; fallback to '/index.html' if empty
-  const tr = path.replace(/^\/eng/, "") || "/index.html";
-  return tr;
+  return path.replace(/^\/eng/, "") || "/index.html";
+}
+
+// --------------------------- FOOTER ENHANCER ---------------------------
+function enhanceFooter(footerRoot) {
+  if (!footerRoot) return;
+
+  injectFooterStyles();
+
+  const footer = footerRoot.querySelector("footer");
+  if (!footer) return;
+
+  // Avoid double-processing
+  if (footer.classList.contains("alba-footer-enhanced")) return;
+  footer.classList.add("alba-footer-enhanced");
+
+  // Improve socials container if present
+  const socials =
+    footer.querySelector(".social-icons") ||
+    footer.querySelector(".footer-socials") ||
+    footer.querySelector("[data-socials]");
+  if (socials) socials.classList.add("alba-footer-socials");
+
+  // Split addresses into 2+ clean blocks (works with many formats)
+  // Strategy:
+  // - Find a likely address container by common classnames
+  // - Parse text -> split by blank lines
+  // - First line becomes title, rest lines become address lines
+  const addressContainer =
+    footer.querySelector(".footer-address") ||
+    footer.querySelector(".footer-right") ||
+    footer.querySelector(".footer-contact") ||
+    footer.querySelector("[data-footer-address]");
+
+  if (addressContainer && !addressContainer.querySelector(".alba-address-grid")) {
+    const raw = (addressContainer.innerText || "").trim();
+    if (raw) {
+      const blocks = raw
+        .split(/\n\s*\n+/) // split by empty line(s)
+        .map((b) => b.trim())
+        .filter(Boolean);
+
+      // If it's a single block, try split by "Merkez" / "Adana" keywords
+      // (still safe: if not found, we keep single block)
+      let finalBlocks = blocks;
+      if (blocks.length === 1) {
+        const one = blocks[0];
+        const parts = one
+          .split(/(?=Merkez Ofis|MERKEZ OFİS|Adana Şube|ADANA ŞUBE)/g)
+          .map((p) => p.trim())
+          .filter(Boolean);
+        if (parts.length >= 2) finalBlocks = parts;
+      }
+
+      const grid = document.createElement("div");
+      grid.className = "alba-address-grid";
+
+      finalBlocks.forEach((block) => {
+        const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
+        if (!lines.length) return;
+
+        const card = document.createElement("div");
+        card.className = "alba-address-card";
+
+        const title = document.createElement("div");
+        title.className = "alba-address-title";
+        title.textContent = lines[0];
+
+        card.appendChild(title);
+
+        lines.slice(1).forEach((line) => {
+          const row = document.createElement("div");
+          row.className = "alba-address-line";
+          row.textContent = line;
+          card.appendChild(row);
+        });
+
+        grid.appendChild(card);
+      });
+
+      addressContainer.innerHTML = "";
+      addressContainer.appendChild(grid);
+      addressContainer.classList.add("alba-address-container");
+    }
+  }
+}
+
+function injectFooterStyles() {
+  if (document.getElementById("albaspace-footer-enhance-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "albaspace-footer-enhance-style";
+  style.textContent = `
+    /* Footer enhancement (global) */
+    footer.alba-footer-enhanced {
+      background: linear-gradient(180deg, #020617 0%, #000814 100%);
+      border-top: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    /* Address layout */
+    .alba-address-container {
+      margin-top: 8px;
+    }
+
+    .alba-address-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 12px;
+    }
+
+    .alba-address-card {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+    }
+
+    .alba-address-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #38bdf8;
+      letter-spacing: 0.04em;
+      font-size: 13px;
+    }
+
+    .alba-address-line {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #cbd5f5;
+      opacity: 0.92;
+    }
+
+    /* Socials enhancement */
+    .alba-footer-socials {
+      display: flex;
+      gap: 14px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .alba-footer-socials a {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(148,163,184,0.35);
+      transition: transform .2s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .alba-footer-socials a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px rgba(56,189,248,0.45);
+      border-color: rgba(56,189,248,0.7);
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+      .alba-address-grid {
+        grid-template-columns: 1fr;
+      }
+      .alba-footer-socials {
+        justify-content: center;
+      }
+      .alba-address-card {
+        text-align: center;
+      }
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 /* ----------------------------------------------------------------------
    Futuristic AlbaSpace Preloader Injection
-
-   Pages using <model-viewer> can take a noticeable amount of time to
-   download and initialize 3D models. To improve user experience, we
-   automatically inject a futuristic loading overlay similar to the one
-   used on the Mars page. This code runs after DOMContentLoaded and
-   attaches itself only if a model-viewer exists on the page and no
-   preloader has been defined manually.
 ---------------------------------------------------------------------- */
-(function() {
+(function () {
   document.addEventListener("DOMContentLoaded", () => {
-    // Only proceed if there is at least one model-viewer on the page
     const viewer = document.querySelector("model-viewer");
     if (!viewer) return;
-    // Do not inject if a custom overlay already exists
     if (document.getElementById("loading-overlay")) return;
-    // Inject styles once per page
+
     if (!document.getElementById("albaspace-preloader-style")) {
       const style = document.createElement("style");
       style.id = "albaspace-preloader-style";
@@ -384,12 +540,10 @@ function toTrPath(path) {
           from { opacity: 1; transform: translateY(0); }
           to   { opacity: 0; transform: translateY(-4px); }
         }
-        @keyframes orbSpin {
-          to { transform: rotate(360deg); }
-        }
+        @keyframes orbSpin { to { transform: rotate(360deg); } }
         @keyframes glowPulse {
           0%, 100% { opacity: 0.4; transform: scale(1); }
-          50%       { opacity: 0.8; transform: scale(1.03); }
+          50%      { opacity: 0.8; transform: scale(1.03); }
         }
         @keyframes scanMove {
           0%   { transform: translateY(-50%); }
@@ -402,7 +556,7 @@ function toTrPath(path) {
       `;
       document.head.appendChild(style);
     }
-    // Create overlay DOM structure
+
     const overlay = document.createElement("div");
     overlay.id = "loading-overlay";
     overlay.innerHTML = `
@@ -427,79 +581,66 @@ function toTrPath(path) {
       </div>
     `;
     document.body.appendChild(overlay);
-    // Resize the loading overlay to match the model-viewer's dimensions on all pages.
-    // Rather than covering the entire screen, the overlay will overlay exactly
-    // the <model-viewer> element. This behaviour now applies to both Turkish
-    // and English pages so that the loading card does not obscure the whole page.
+
+    // Position overlay on top of the model-viewer (not full screen)
     try {
       const rect = viewer.getBoundingClientRect();
       overlay.style.position = "absolute";
-      overlay.style.top = (rect.top + window.scrollY) + "px";
-      overlay.style.left = (rect.left + window.scrollX) + "px";
+      overlay.style.top = rect.top + window.scrollY + "px";
+      overlay.style.left = rect.left + window.scrollX + "px";
       overlay.style.width = rect.width + "px";
       overlay.style.height = rect.height + "px";
-      // reset right/bottom so the overlay doesn't fill the screen
       overlay.style.right = "auto";
       overlay.style.bottom = "auto";
     } catch (e) {
       console.warn("Could not adjust preloader size:", e);
     }
+
     const progressFill = overlay.querySelector(".progress-fill");
-    // Helper to fade out and remove overlay
+
     const hideOverlay = () => {
       if (overlay.classList.contains("fade-out")) return;
       overlay.classList.add("fade-out");
       setTimeout(() => {
-        if (overlay && overlay.parentNode) {
-          overlay.parentNode.removeChild(overlay);
-        }
+        overlay?.parentNode?.removeChild(overlay);
       }, 550);
     };
-    // Update progress bar based on model viewer progress
+
     viewer.addEventListener("progress", (event) => {
-      const total = event.detail && typeof event.detail.totalProgress === "number"
-        ? event.detail.totalProgress
-        : null;
+      const total =
+        event.detail && typeof event.detail.totalProgress === "number"
+          ? event.detail.totalProgress
+          : null;
       if (total !== null) {
         const percent = Math.max(0, Math.min(100, Math.round(total * 100)));
         progressFill.style.width = percent + "%";
       }
     });
-    // On model load, fill progress bar and hide overlay shortly after
+
     viewer.addEventListener("load", () => {
       progressFill.style.width = "100%";
       setTimeout(hideOverlay, 250);
     });
-    // Ensure overlay hides after a maximum of 20 seconds (fallback)
+
     setTimeout(hideOverlay, 20000);
   });
 })();
 
 /* ----------------------------------------------------------------------
    Atlas Next/Previous Navigation
-
-   On index pages for Atlas objects (e.g. /mars/, /eng/mars/), add a pair
-   of arrow buttons at the bottom linking to the previous and next pages
-   in the Atlas order. This runs on both English and Turkish pages; the
-   only difference is the path prefix (/eng/ for English). Text inside
-   the buttons remains the same across languages (arrows only).
 ---------------------------------------------------------------------- */
-(function() {
+(function () {
   document.addEventListener("DOMContentLoaded", () => {
-    const slug = (function() {
+    const slug = (function () {
       let path = window.location.pathname || "/";
-      // Normalize to remove index.html
       path = path.replace(/\/index\.html$/, "/");
-      // Remove language prefix
-      if (path.startsWith("/eng/")) {
-        path = path.substring(5); // strip '/eng/'
-      }
-      // Remove leading/trailing slashes
+      if (path.startsWith("/eng/")) path = path.substring(5);
       const segments = path.split("/").filter(Boolean);
       return segments.length > 0 ? segments[0] : null;
     })();
+
     if (!slug) return;
-    // List of Atlas pages in order (slugs). Keep in sync with atlas.html
+
     const pagesOrder = [
       "gokturk-1", "gokturk-2", "rasat", "imece",
       "turksat-1A", "turksat-1B", "turksat-1C", "turksat-2A",
@@ -513,17 +654,18 @@ function toTrPath(path) {
       "perseverance", "curiosity", "ingenuity", "opportunity",
       "sojourner", "spirit", "zhurong"
     ];
+
     const idx = pagesOrder.indexOf(slug);
     if (idx === -1) return;
-    // Determine previous and next indices cyclically
+
     const prevSlug = pagesOrder[(idx - 1 + pagesOrder.length) % pagesOrder.length];
     const nextSlug = pagesOrder[(idx + 1) % pagesOrder.length];
-    // Determine language prefix based on current path
+
     const isEnglish = window.location.pathname.startsWith("/eng/");
     const prefix = isEnglish ? "/eng/" : "/";
     const prevLink = prefix + prevSlug + "/";
     const nextLink = prefix + nextSlug + "/";
-    // Create nav container
+
     const navDiv = document.createElement("div");
     navDiv.id = "atlas-page-nav";
     navDiv.style.display = "flex";
@@ -532,7 +674,7 @@ function toTrPath(path) {
     navDiv.style.maxWidth = "640px";
     navDiv.style.margin = "40px auto";
     navDiv.style.padding = "0 16px";
-    // Create previous button
+
     const prevA = document.createElement("a");
     prevA.href = prevLink;
     prevA.className = "atlas-nav-button atlas-nav-prev";
@@ -540,7 +682,7 @@ function toTrPath(path) {
     prevA.style.textDecoration = "none";
     prevA.style.fontSize = "22px";
     prevA.style.lineHeight = "1";
-    // Create next button
+
     const nextA = document.createElement("a");
     nextA.href = nextLink;
     nextA.className = "atlas-nav-button atlas-nav-next";
@@ -548,7 +690,7 @@ function toTrPath(path) {
     nextA.style.textDecoration = "none";
     nextA.style.fontSize = "22px";
     nextA.style.lineHeight = "1";
-    // Styling for buttons
+
     [prevA, nextA].forEach((btn) => {
       btn.style.display = "flex";
       btn.style.alignItems = "center";
@@ -569,10 +711,13 @@ function toTrPath(path) {
         btn.style.boxShadow = "none";
       });
     });
+
     navDiv.appendChild(prevA);
     navDiv.appendChild(nextA);
-    // Insert nav before the global footer include if possible, else append to body
-    const footerInclude = document.querySelector('div[data-include$="footer-en.html"], div[data-include$="footer-tr.html"]');
+
+    const footerInclude = document.querySelector(
+      'div[data-include$="footer-en.html"], div[data-include$="footer-tr.html"]'
+    );
     if (footerInclude && footerInclude.parentNode) {
       footerInclude.parentNode.insertBefore(navDiv, footerInclude);
     } else {
