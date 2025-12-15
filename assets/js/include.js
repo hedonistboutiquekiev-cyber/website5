@@ -5,7 +5,7 @@
 // - active nav
 // - language switch
 // - futuristic preloader
-// - GLOBAL footer enhancement (address buttons + phone button + tooltips)
+// - GLOBAL footer enhancement (address buttons + square call next to logo + tooltips)
 
 document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
@@ -149,13 +149,13 @@ function toTrPath(path) {
   return path.replace(/^\/eng/, "") || "/index.html";
 }
 
-// ================= FOOTER ENHANCER (Buttons layout + tooltips) =================
+// ================= FOOTER ENHANCER (addresses + call square near logo) =================
 function enhanceFooter(root) {
   injectFooterStyles();
 
   const footer = root.querySelector("footer");
-  if (!footer || footer.classList.contains("alba-footer-v4")) return;
-  footer.classList.add("alba-footer-v4");
+  if (!footer || footer.classList.contains("alba-footer-v5")) return;
+  footer.classList.add("alba-footer-v5");
 
   // Optional: style socials if present
   const socials =
@@ -164,86 +164,113 @@ function enhanceFooter(root) {
     footer.querySelector("[data-socials]");
   if (socials) socials.classList.add("alba-footer-socials");
 
-  // Where the address text sits (usually right column)
-  const container =
+  // IMPORTANT: we only touch the RIGHT address container (not whole footer)
+  const addressContainer =
     footer.querySelector(".footer-right") ||
     footer.querySelector(".footer-address") ||
     footer.querySelector(".footer-contact") ||
-    footer.querySelector("[data-footer-address]") ||
-    footer;
+    footer.querySelector("[data-footer-address]");
 
-  // Extract text and parse
-  const raw = (container.innerText || "").trim();
-  if (!raw) return;
+  if (!addressContainer) return;
 
-  // Phone detection
-  const phoneMatch = raw.match(/(\+?\s*\d[\d\s()-]{7,}\d)/);
-  const phoneRaw = phoneMatch ? phoneMatch[1].trim() : "";
+  const rawAddrText = (addressContainer.innerText || "").trim();
+  if (!rawAddrText) return;
+
+  // Extract sections reliably
+  const merkezBlock = extractSection(rawAddrText, /Merkez Ofis/i, /Adana Şube/i);
+  const adanaBlock = extractSection(rawAddrText, /Adana Şube/i, null);
+
+  // Find phone in addressContainer OR anywhere in footer
+  const phoneRaw = findPhone(rawAddrText) || findPhone(footer.innerText || "");
   const phoneTel = phoneRaw ? phoneRaw.replace(/[^\d+]/g, "") : "";
 
-  // Remove phone line from content so it doesn't pollute address parsing
-  const rawWithoutPhone = phoneRaw ? raw.replace(phoneRaw, "").trim() : raw;
-
-  // Prefer splitting by blank lines, else by keywords
-  let blocks = rawWithoutPhone
-    .split(/\n\s*\n+/)
-    .map((b) => b.trim())
-    .filter(Boolean);
-
-  if (blocks.length === 1) {
-    const one = blocks[0];
-    const parts = one
-      .split(/(?=Merkez Ofis|MERKEZ OFİS|Adana Şube|ADANA ŞUBE)/g)
-      .map((p) => p.trim())
-      .filter(Boolean);
-    if (parts.length >= 2) blocks = parts;
-  }
-
-  // Build right panel like your sketch: (1) address button, (2) address button, (3) phone button
+  // Build address buttons (1) and (2)
   const panel = document.createElement("div");
-  panel.className = "alba-footer-panel";
+  panel.className = "alba-footer-address-panel";
 
-  blocks.slice(0, 2).forEach((blockText) => {
-    const lines = blockText.split("\n").map((l) => l.trim()).filter(Boolean);
-    if (!lines.length) return;
+  const b1 = buildAddressButton(merkezBlock);
+  const b2 = buildAddressButton(adanaBlock);
 
-    const title = lines[0];
-    const address = lines.slice(1).join(", ").replace(/\s+/g, " ").trim();
-    if (!address) return;
+  // If parsing failed, don't destroy the existing footer content
+  if (!b1 && !b2) return;
 
-    const a = document.createElement("a");
-    a.className = "alba-footer-btn";
-    a.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.title = "Open in Google Maps";
-    a.setAttribute("aria-label", "Open in Google Maps: " + title);
+  if (b1) panel.appendChild(b1);
+  if (b2) panel.appendChild(b2);
 
-    a.innerHTML = `
-      <div class="btn-title">${escapeHtml(title)}</div>
-      <div class="btn-text">${escapeHtml(address)}</div>
-    `;
-    panel.appendChild(a);
-  });
+  addressContainer.innerHTML = "";
+  addressContainer.appendChild(panel);
 
+  // Build square Call button and insert next to logo
   if (phoneTel) {
-    const p = document.createElement("a");
-    p.className = "alba-footer-btn phone";
-    p.href = "tel:" + phoneTel;
-    p.title = "Tap to call";
-    p.setAttribute("aria-label", "Tap to call: " + phoneRaw);
+    const logoImg =
+      footer.querySelector('img[src*="logo"]') ||
+      footer.querySelector(".footer-logo img") ||
+      footer.querySelector(".logo img") ||
+      footer.querySelector("img");
 
-    p.innerHTML = `
-      <div class="btn-title">Call</div>
-      <div class="btn-text">${escapeHtml(phoneRaw)}</div>
-      <div class="btn-sub">Tap to call</div>
-    `;
-    panel.appendChild(p);
+    if (logoImg && !footer.querySelector(".alba-call-square")) {
+      const callBtn = document.createElement("a");
+      callBtn.className = "alba-call-square";
+      callBtn.href = `tel:${phoneTel}`;
+      callBtn.title = "Tap to call";
+      callBtn.setAttribute("aria-label", "Tap to call: " + phoneRaw);
+
+      callBtn.innerHTML = `
+        <div class="alba-call-square__label">Call</div>
+        <div class="alba-call-square__sub">Tap</div>
+      `;
+
+      logoImg.insertAdjacentElement("afterend", callBtn);
+      logoImg.style.marginRight = "14px";
+    }
   }
+}
 
-  // Replace container content with our new panel
-  container.innerHTML = "";
-  container.appendChild(panel);
+function buildAddressButton(blockText) {
+  if (!blockText) return null;
+
+  const lines = blockText.split("\n").map((s) => s.trim()).filter(Boolean);
+  if (!lines.length) return null;
+
+  const title = lines[0];
+  const address = lines.slice(1).join(", ").replace(/\s+/g, " ").trim();
+  if (!address) return null;
+
+  const a = document.createElement("a");
+  a.className = "alba-footer-btn";
+  a.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.title = "Open in Google Maps";
+  a.setAttribute("aria-label", "Open in Google Maps: " + title);
+
+  a.innerHTML = `
+    <div class="btn-title">${escapeHtml(title)}</div>
+    <div class="btn-text">${escapeHtml(address)}</div>
+  `;
+
+  return a;
+}
+
+// Takes section from startRegex to beforeRegex (optional)
+function extractSection(text, startRegex, beforeRegex) {
+  if (!text) return "";
+  const start = text.search(startRegex);
+  if (start === -1) return "";
+
+  const sliced = text.slice(start);
+  if (!beforeRegex) return sliced.trim();
+
+  const end = sliced.search(beforeRegex);
+  if (end === -1) return sliced.trim();
+
+  return sliced.slice(0, end).trim();
+}
+
+function findPhone(text) {
+  if (!text) return "";
+  const m = text.match(/(\+?\s*\d[\d\s()-]{7,}\d)/);
+  return m ? m[1].trim() : "";
 }
 
 function escapeHtml(str) {
@@ -257,13 +284,13 @@ function escapeHtml(str) {
 
 // ================= FOOTER STYLES =================
 function injectFooterStyles() {
-  if (document.getElementById("alba-footer-style-v4")) return;
+  if (document.getElementById("alba-footer-style-v5")) return;
 
   const s = document.createElement("style");
-  s.id = "alba-footer-style-v4";
+  s.id = "alba-footer-style-v5";
   s.textContent = `
-    /* Right panel buttons */
-    .alba-footer-panel {
+    /* Right block: two address buttons */
+    .alba-footer-address-panel {
       max-width: 520px;
       width: 100%;
       display: flex;
@@ -309,17 +336,6 @@ function injectFooterStyles() {
       opacity: .95;
     }
 
-    .btn-sub {
-      margin-top: 4px;
-      font-size: 11px;
-      opacity: .65;
-      color: #cbd5f5;
-    }
-
-    .alba-footer-btn.phone .btn-title {
-      color: #a7f3d0;
-    }
-
     /* Tooltip bubble via title attr */
     .alba-footer-btn::after {
       content: attr(title);
@@ -345,7 +361,49 @@ function injectFooterStyles() {
       transform: translateX(-50%) translateY(-2px);
     }
 
-    /* Optional socials nice spacing */
+    /* Square CALL button (next to logo) */
+    .alba-call-square {
+      width: 74px;
+      height: 74px;
+      border-radius: 16px;
+      background: rgba(15,23,42,.55);
+      border: 1px solid rgba(148,163,184,.28);
+      box-shadow: 0 14px 38px rgba(0,0,0,.35);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      margin-left: 12px;
+      vertical-align: middle;
+      transition: transform .2s ease, box-shadow .25s ease, border-color .25s ease;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    .alba-call-square:hover {
+      transform: translateY(-2px);
+      border-color: rgba(167,243,208,.75);
+      box-shadow: 0 18px 52px rgba(167,243,208,.10), 0 14px 38px rgba(0,0,0,.45);
+    }
+
+    .alba-call-square__label {
+      font-weight: 900;
+      color: #a7f3d0;
+      font-size: 14px;
+      letter-spacing: .04em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .alba-call-square__sub {
+      font-size: 11px;
+      color: #cbd5f5;
+      opacity: .75;
+      line-height: 1;
+    }
+
+    /* Optional socials */
     .alba-footer-socials {
       display: flex;
       gap: 14px;
@@ -353,10 +411,10 @@ function injectFooterStyles() {
       align-items: center;
     }
 
-    /* Mobile: center right panel */
+    /* Mobile */
     @media (max-width: 768px) {
-      .alba-footer-panel {
-        margin: 0 auto;
+      .alba-footer-address-panel {
+        margin: 12px auto 0;
         max-width: 520px;
       }
     }
