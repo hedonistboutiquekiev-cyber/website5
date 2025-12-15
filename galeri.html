@@ -5,9 +5,9 @@
   <title>AlbaSpace – Galeri</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Общие стили хедера и футера -->
   <link rel="stylesheet" href="/assets/css/site.css" />
   <script src="/assets/js/include.js" defer></script>
+  <script src="/assets/js/menu-toggle.js" defer></script>
 
   <style>
     :root {
@@ -23,7 +23,6 @@
       color:#ffffff;
     }
 
-    /* ---------- PAGE WRAPPER ---------- */
     .page-wrapper{
       max-width:1100px;
       margin:70px auto 80px;
@@ -55,7 +54,6 @@
       text-align:center;
     }
 
-    /* ---------- FOLDER ACCORDION ---------- */
     .folders{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -82,19 +80,11 @@
       color:#e5e7eb;
     }
 
-    .folder-title{
-      font-size:14px;
-      font-weight:600;
-    }
-
-    .folder-count{
-      font-size:12px;
-      color:#9ca3af;
-    }
+    .folder-title{ font-size:14px; font-weight:600; }
+    .folder-count{ font-size:12px; color:#9ca3af; }
 
     .folder-toggle-icon{
-      width:18px;
-      height:18px;
+      width:18px;height:18px;
       border-radius:999px;
       border:1px solid #4b5563;
       display:flex;
@@ -118,7 +108,6 @@
       background:radial-gradient(circle at top,rgba(15,23,42,0.98),rgba(15,23,42,0.9));
     }
 
-    /* ---------- IMAGE GRID ---------- */
     .thumb-grid{
       padding:14px 12px 16px;
       display:grid;
@@ -148,25 +137,13 @@
         0 10px 26px rgba(0,0,0,0.9);
     }
 
-    .thumb img{
-      width:100%;
-      border-radius:10px;
-      display:block;
-    }
-
-    .thumb span{
-      font-size:12px;
-      margin-top:4px;
-      color:#d1d5db;
-    }
+    .thumb img{ width:100%; border-radius:10px; display:block; }
+    .thumb span{ font-size:12px; margin-top:4px; color:#d1d5db; }
 
     @media(max-width:900px){
-      .page-wrapper{
-        margin-top:90px;
-      }
+      .page-wrapper{ margin-top:90px; }
     }
 
-    /* ---------- LIGHTBOX (fullscreen viewer) ---------- */
     .lightbox-overlay{
       position:fixed;
       inset:0;
@@ -176,10 +153,7 @@
       justify-content:center;
       z-index:9999;
     }
-
-    .lightbox-overlay.active{
-      display:flex;
-    }
+    .lightbox-overlay.active{ display:flex; }
 
     .lightbox-inner{
       position:relative;
@@ -189,14 +163,12 @@
       flex-direction:column;
       align-items:center;
     }
-
     .lightbox-image{
       max-width:100%;
       max-height:80vh;
       border-radius:14px;
       box-shadow:0 20px 60px rgba(0,0,0,0.9);
     }
-
     .lightbox-caption{
       margin-top:10px;
       font-size:14px;
@@ -204,7 +176,6 @@
       text-align:center;
       text-shadow:0 0 10px rgba(0,0,0,1);
     }
-
     .lightbox-close{
       position:absolute;
       top:-40px;
@@ -217,13 +188,11 @@
       border:1px solid rgba(148,163,184,0.7);
       background:rgba(15,23,42,0.92);
     }
-
     .lightbox-arrow{
       position:absolute;
       top:50%;
       transform:translateY(-50%);
-      width:40px;
-      height:40px;
+      width:40px;height:40px;
       border-radius:999px;
       border:1px solid rgba(148,163,184,0.7);
       background:rgba(15,23,42,0.92);
@@ -235,7 +204,6 @@
       cursor:pointer;
       user-select:none;
     }
-
     .lightbox-arrow-left{ left:-60px; }
     .lightbox-arrow-right{ right:-60px; }
 
@@ -244,13 +212,96 @@
       .lightbox-arrow-right{ right:10px; }
       .lightbox-close{ top:10px; right:10px; }
     }
+
+    /* ---------- AI Agent launcher (placeholder) ---------- */
+    .ai-launcher-btn{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:9998;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(2,6,23,0.72);
+      color:#e5e7eb;
+      backdrop-filter:blur(10px);
+      box-shadow:0 18px 50px rgba(0,0,0,0.65);
+      cursor:pointer;
+      user-select:none;
+      transition:transform .15s ease, filter .15s ease;
+      font-size:13px;
+      letter-spacing:.03em;
+    }
+    .ai-launcher-btn:hover{ transform:translateY(-2px); filter:brightness(1.06); }
+    .ai-dot{
+      width:10px;height:10px;border-radius:999px;
+      background:linear-gradient(135deg,#00c2ff,#22c55e);
+      box-shadow:0 0 18px rgba(56,189,248,0.65);
+    }
+    .ai-panel{
+      position:fixed;
+      right:18px;
+      bottom:74px;
+      width:min(420px, calc(100vw - 36px));
+      height:520px;
+      z-index:9999;
+      display:none;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,0.35);
+      background:rgba(2,6,23,0.92);
+      backdrop-filter:blur(12px);
+      box-shadow:0 24px 70px rgba(0,0,0,0.8);
+    }
+    .ai-panel.open{ display:block; }
+    .ai-panel-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 12px;
+      background:linear-gradient(90deg, rgba(56,189,248,0.18), rgba(34,197,94,0.10), rgba(56,189,248,0.18));
+      border-bottom:1px solid rgba(148,163,184,0.22);
+      color:#e5e7eb;
+      font-size:13px;
+    }
+    .ai-panel-header strong{ font-weight:650; letter-spacing:.02em; }
+    .ai-close{
+      border:none;
+      background:rgba(2,6,23,0.55);
+      color:#e5e7eb;
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:999px;
+      width:32px;height:32px;
+      cursor:pointer;
+      font-size:18px;
+      line-height:1;
+    }
+    .ai-panel-body{
+      height:calc(100% - 52px);
+      padding:14px;
+      color:#e5e7eb;
+      font-size:13px;
+    }
+    .ai-placeholder{
+      height:100%;
+      border-radius:14px;
+      border:1px dashed rgba(148,163,184,0.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+      background:rgba(15,23,42,0.55);
+      line-height:1.5;
+      color:#cbd5f5;
+    }
   </style>
-  <link rel="stylesheet" href="/assets/css/site.css" />
-  <script src="/assets/js/include.js" defer></script>
-  <script src="/assets/js/menu-toggle.js" defer></script>
 </head>
+
 <body>
-  <!-- общий хедер -->
   <div data-include="/header-tr.html"></div>
 
   <div class="page-wrapper">
@@ -261,8 +312,7 @@
       </p>
 
       <div class="folders">
-
-        <!-- 1. Stratosfer Uçuşları: 1–14 -->
+        <!-- 1 -->
         <div class="folder open">
           <div class="folder-header">
             <div>
@@ -273,67 +323,25 @@
           </div>
           <div class="folder-body">
             <div class="thumb-grid">
-              <div class="thumb">
-                <img src="/assets/images/1.jpg" alt="1">
-                <span>1</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/2.jpg" alt="2">
-                <span>2</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/3.jpg" alt="3">
-                <span>3</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/4.jpg" alt="4">
-                <span>4</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/5.jpg" alt="5">
-                <span>5</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/6.jpg" alt="6">
-                <span>6</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/7.jpg" alt="7">
-                <span>7</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/8.jpg" alt="8">
-                <span>8</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/9.jpg" alt="9">
-                <span>9</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/10.jpg" alt="10">
-                <span>10</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/11.jpg" alt="11">
-                <span>11</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/12.jpg" alt="12">
-                <span>12</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/13.jpg" alt="13">
-                <span>13</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/14.jpg" alt="14">
-                <span>14</span>
-              </div>
+              <div class="thumb"><img src="/assets/images/1.jpg" alt="1"><span>1</span></div>
+              <div class="thumb"><img src="/assets/images/2.jpg" alt="2"><span>2</span></div>
+              <div class="thumb"><img src="/assets/images/3.jpg" alt="3"><span>3</span></div>
+              <div class="thumb"><img src="/assets/images/4.jpg" alt="4"><span>4</span></div>
+              <div class="thumb"><img src="/assets/images/5.jpg" alt="5"><span>5</span></div>
+              <div class="thumb"><img src="/assets/images/6.jpg" alt="6"><span>6</span></div>
+              <div class="thumb"><img src="/assets/images/7.jpg" alt="7"><span>7</span></div>
+              <div class="thumb"><img src="/assets/images/8.jpg" alt="8"><span>8</span></div>
+              <div class="thumb"><img src="/assets/images/9.jpg" alt="9"><span>9</span></div>
+              <div class="thumb"><img src="/assets/images/10.jpg" alt="10"><span>10</span></div>
+              <div class="thumb"><img src="/assets/images/11.jpg" alt="11"><span>11</span></div>
+              <div class="thumb"><img src="/assets/images/12.jpg" alt="12"><span>12</span></div>
+              <div class="thumb"><img src="/assets/images/13.jpg" alt="13"><span>13</span></div>
+              <div class="thumb"><img src="/assets/images/14.jpg" alt="14"><span>14</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 2. VR -->
+        <!-- 2 -->
         <div class="folder">
           <div class="folder-header">
             <div>
@@ -344,19 +352,13 @@
           </div>
           <div class="folder-body">
             <div class="thumb-grid">
-              <div class="thumb">
-                <img src="/assets/images/vr.jpg" alt="VR 1">
-                <span>VR 1</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/vr1.jpg" alt="VR 2">
-                <span>VR 2</span>
-              </div>
+              <div class="thumb"><img src="/assets/images/vr.jpg" alt="VR 1"><span>VR 1</span></div>
+              <div class="thumb"><img src="/assets/images/vr1.jpg" alt="VR 2"><span>VR 2</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 3. Eğitim & Etkinlikler: 15–18 -->
+        <!-- 3 -->
         <div class="folder">
           <div class="folder-header">
             <div>
@@ -367,27 +369,15 @@
           </div>
           <div class="folder-body">
             <div class="thumb-grid">
-              <div class="thumb">
-                <img src="/assets/images/15.jpg" alt="15">
-                <span>15</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/16.jpg" alt="16">
-                <span>16</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/17.jpg" alt="17">
-                <span>17</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/18.jpg" alt="18">
-                <span>18</span>
-              </div>
+              <div class="thumb"><img src="/assets/images/15.jpg" alt="15"><span>15</span></div>
+              <div class="thumb"><img src="/assets/images/16.jpg" alt="16"><span>16</span></div>
+              <div class="thumb"><img src="/assets/images/17.jpg" alt="17"><span>17</span></div>
+              <div class="thumb"><img src="/assets/images/18.jpg" alt="18"><span>18</span></div>
             </div>
           </div>
         </div>
 
-        <!-- 4. Basın & Diğer: 19–23 -->
+        <!-- 4 -->
         <div class="folder">
           <div class="folder-header">
             <div>
@@ -398,35 +388,18 @@
           </div>
           <div class="folder-body">
             <div class="thumb-grid">
-              <div class="thumb">
-                <img src="/assets/images/19.jpg" alt="19">
-                <span>19</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/20.jpg" alt="20">
-                <span>20</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/21.jpg" alt="21">
-                <span>21</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/22.jpg" alt="22">
-                <span>22</span>
-              </div>
-              <div class="thumb">
-                <img src="/assets/images/23.jpg" alt="23">
-                <span>23</span>
-              </div>
+              <div class="thumb"><img src="/assets/images/19.jpg" alt="19"><span>19</span></div>
+              <div class="thumb"><img src="/assets/images/20.jpg" alt="20"><span>20</span></div>
+              <div class="thumb"><img src="/assets/images/21.jpg" alt="21"><span>21</span></div>
+              <div class="thumb"><img src="/assets/images/22.jpg" alt="22"><span>22</span></div>
+              <div class="thumb"><img src="/assets/images/23.jpg" alt="23"><span>23</span></div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-      </div><!-- /.folders -->
-    </div><!-- /.gallery-card -->
-  </div><!-- /.page-wrapper -->
-
-  <!-- LIGHTBOX HTML -->
   <div class="lightbox-overlay" id="lightbox">
     <div class="lightbox-inner">
       <div class="lightbox-arrow lightbox-arrow-left" id="lightboxPrev">&#10094;</div>
@@ -437,9 +410,7 @@
     </div>
   </div>
 
-  <!-- Логика аккордеона + лайтбокса -->
   <script>
-    // Аккордеон для папок
     document.querySelectorAll('.folder').forEach(function(folder){
       const header = folder.querySelector('.folder-header');
       const body   = folder.querySelector('.folder-body');
@@ -466,7 +437,6 @@
       });
     });
 
-    // ---------- LIGHTBOX ----------
     const lightbox        = document.getElementById('lightbox');
     const lightboxImage   = document.getElementById('lightboxImage');
     const lightboxCaption = document.getElementById('lightboxCaption');
@@ -491,12 +461,10 @@
       lightbox.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
-
     function closeLightbox(){
       lightbox.classList.remove('active');
       document.body.style.overflow = '';
     }
-
     function showImage(index){
       const item = images[index];
       if (!item) return;
@@ -504,12 +472,10 @@
       lightboxImage.alt = item.alt;
       lightboxCaption.textContent = item.alt || '';
     }
-
     function showNext(){
       currentIndex = (currentIndex + 1) % images.length;
       showImage(currentIndex);
     }
-
     function showPrev(){
       currentIndex = (currentIndex - 1 + images.length) % images.length;
       showImage(currentIndex);
@@ -529,42 +495,59 @@
       }
     });
 
-    lightboxClose.addEventListener('click', function(e){
-      e.stopPropagation();
-      closeLightbox();
-    });
+    lightboxClose.addEventListener('click', function(e){ e.stopPropagation(); closeLightbox(); });
+    lightboxPrev.addEventListener('click', function(e){ e.stopPropagation(); showPrev(); });
+    lightboxNext.addEventListener('click', function(e){ e.stopPropagation(); showNext(); });
 
-    lightboxPrev.addEventListener('click', function(e){
-      e.stopPropagation();
-      showPrev();
-    });
-
-    lightboxNext.addEventListener('click', function(e){
-      e.stopPropagation();
-      showNext();
-    });
-
-    // клик по фону закрывает
     lightbox.addEventListener('click', function(e){
-      if (e.target === lightbox){
-        closeLightbox();
-      }
+      if (e.target === lightbox) closeLightbox();
     });
 
-    // управление с клавиатуры
     document.addEventListener('keydown', function(e){
       if (!lightbox.classList.contains('active')) return;
-      if (e.key === 'Escape'){
-        closeLightbox();
-      } else if (e.key === 'ArrowRight'){
-        showNext();
-      } else if (e.key === 'ArrowLeft'){
-        showPrev();
-      }
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowRight') showNext();
+      else if (e.key === 'ArrowLeft') showPrev();
     });
   </script>
 
-  <!-- общий футер -->
+  <!-- AI Agent (placeholder) -->
+  <button class="ai-launcher-btn" id="aiLauncherBtn" type="button" aria-haspopup="dialog" aria-controls="aiPanel">
+    <span class="ai-dot" aria-hidden="true"></span>
+    AI Agent
+  </button>
+
+  <div class="ai-panel" id="aiPanel" role="dialog" aria-modal="true" aria-label="AI Agent">
+    <div class="ai-panel-header">
+      <strong>AI Agent</strong>
+      <button class="ai-close" id="aiCloseBtn" type="button" aria-label="Kapat">&times;</button>
+    </div>
+    <div class="ai-panel-body">
+      <div class="ai-placeholder">
+        Buraya AI widget gelecek.<br>
+        (Sonra ElevenLabs / başka bir agent embed edebilirsiniz.)
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const btn = document.getElementById('aiLauncherBtn');
+      const panel = document.getElementById('aiPanel');
+      const close = document.getElementById('aiCloseBtn');
+      if(!btn || !panel || !close) return;
+
+      function openPanel(){ panel.classList.add('open'); document.body.style.overflow='hidden'; }
+      function closePanel(){ panel.classList.remove('open'); document.body.style.overflow=''; }
+
+      btn.addEventListener('click', () => panel.classList.contains('open') ? closePanel() : openPanel());
+      close.addEventListener('click', closePanel);
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+      });
+    })();
+  </script>
+
   <div data-include="/footer-tr.html"></div>
 </body>
 </html>
