@@ -1,10 +1,11 @@
 // Unified include.js for AlbaSpace website (Turkish)
 //
-// This script dynamically loads header and footer fragments, highlights the
-// current navigation item, provides a language switcher, injects a preloader
-// for 3D model pages and enhances the footer with neatly styled address
-// buttons and a call shortcut.  The enhancements added in this version
-// improve the footer presentation on both desktop and mobile devices.
+// Handles:
+// - header/footer includes
+// - active nav
+// - language switch
+// - futuristic preloader
+// - GLOBAL footer enhancement (address buttons + square call next to logo + tooltips)
 
 document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
@@ -211,19 +212,12 @@ function enhanceFooter(root) {
       const callBtn = document.createElement("a");
       callBtn.className = "alba-call-square";
       callBtn.href = `tel:${phoneTel}`;
-      // Initialize with a Turkish call hint; this will be finalized when innerHTML is set below.
-      callBtn.title = "Aramak için dokunun";
-      callBtn.setAttribute("aria-label", "Aramak için dokunun: " + (phoneRaw || ""));
+      callBtn.title = "Tap to call";
+      callBtn.setAttribute("aria-label", "Tap to call: " + phoneRaw);
 
-      // Replace generic call label with actual phone number and a Turkish "tap to call" hint.
-      // The hint uses the alba-blink class defined in injectFooterStyles for a subtle blinking effect.
-      const displayNumber = "+90 538 778 18";
-      const callHintTr = "Aramak için dokunun";
-      callBtn.title = callHintTr;
-      callBtn.setAttribute("aria-label", callHintTr + ": " + displayNumber);
       callBtn.innerHTML = `
-        <div class="alba-call-square__label">${displayNumber}</div>
-        <div class="alba-call-square__sub alba-blink">${callHintTr}</div>
+        <div class="alba-call-square__label">Call</div>
+        <div class="alba-call-square__sub">Tap</div>
       `;
 
       logoImg.insertAdjacentElement("afterend", callBtn);
@@ -250,13 +244,9 @@ function buildAddressButton(blockText) {
   a.title = "Open in Google Maps";
   a.setAttribute("aria-label", "Open in Google Maps: " + title);
 
-  // Add a small Turkish hint below the address prompting the user to open the map.
-  // The alba-blink class animates the text to gently blink, improving visibility on both mobile and desktop.
-  const mapHintTr = "Haritayı açmak için dokunun";
   a.innerHTML = `
     <div class="btn-title">${escapeHtml(title)}</div>
     <div class="btn-text">${escapeHtml(address)}</div>
-    <div class="btn-tip alba-blink">${mapHintTr}</div>
   `;
 
   return a;
@@ -427,21 +417,6 @@ function injectFooterStyles() {
         margin: 12px auto 0;
         max-width: 520px;
       }
-    }
-
-    /* Added subtle blinking animation used for call and map hints */
-    .btn-tip {
-      font-size: 11px;
-      color: #94a3b8;
-      opacity: 0.8;
-      margin-top: 4px;
-    }
-    .alba-blink {
-      animation: alba-blink 1.5s ease-in-out infinite;
-    }
-    @keyframes alba-blink {
-      0%, 100% { opacity: 0.8; }
-      50%      { opacity: 0.3; }
     }
   `;
   document.head.appendChild(s);
@@ -646,7 +621,7 @@ function injectFooterStyles() {
           <div class="progress-bar"><div class="progress-fill"></div></div>
           <div class="progress-glow"></div>
         </div>
-        <div class="overlay-hint">AR &amp; 3D experience is being prepared.</div>
+        <div class="overlay-hint">AR &amp; 33D experience is being prepared.</div>
       </div>
     `;
     document.body.appendChild(overlay);
