@@ -184,9 +184,9 @@ function enhanceFooter(root) {
   const phoneTel = phoneRaw ? phoneRaw.replace(/[^\d+]/g, "") : "";
 
   // Build address buttons (1) and (2)
-  // Remove any existing mailto links in the footer to avoid duplication
-  const mailAnchors = footer.querySelectorAll('a[href^="mailto:"]');
-  mailAnchors.forEach((el) => el.remove());
+  // Remove any existing mailto link in the footer to avoid duplication
+  const mailAnchor = footer.querySelector('a[href^="mailto:"]');
+  if (mailAnchor) mailAnchor.remove();
 
   // Build contact panel with phone and email buttons, followed by address cards.
   const contactPanel = document.createElement('div');
@@ -218,23 +218,14 @@ function enhanceFooter(root) {
   `;
   contactPanel.appendChild(emailBtn);
 
-  // Address map buttons
-  // Build two map buttons (Merkez Ofis and Adana Şube)
-  const map1 = buildMapButton(merkezBlock);
-  const map2 = buildMapButton(adanaBlock);
-  if (map1) contactPanel.appendChild(map1);
-  if (map2) contactPanel.appendChild(map2);
+  // Address cards
+  const card1 = buildAddressCard(merkezBlock);
+  const card2 = buildAddressCard(adanaBlock);
+  if (card1) contactPanel.appendChild(card1);
+  if (card2) contactPanel.appendChild(card2);
 
   // Clear existing addressContainer and insert the new contact panel
   addressContainer.innerHTML = '';
-  // Center the address container and contact panel within the footer
-  // This ensures the panel appears in the middle rather than aligned to the right
-  addressContainer.style.display = 'flex';
-  addressContainer.style.flexDirection = 'column';
-  addressContainer.style.alignItems = 'center';
-  addressContainer.style.justifyContent = 'center';
-  addressContainer.style.width = '100%';
-  addressContainer.style.margin = '0 auto';
   addressContainer.appendChild(contactPanel);
 }
 
@@ -265,38 +256,6 @@ function buildAddressButton(blockText) {
     <div class="btn-tip alba-blink">${mapHintTr}</div>
   `;
 
-  return a;
-}
-
-// Build a map button styled like other contact actions. Each map button contains
-// an icon, the office name (title), the full address, and a blinking hint in Turkish.
-function buildMapButton(blockText) {
-  if (!blockText) return null;
-  const lines = blockText
-    .split('\n')
-    .map((s) => s.trim())
-    .filter(Boolean);
-  if (!lines.length) return null;
-  const title = lines[0];
-  // Remove any phone numbers from the rest of the lines
-  const addressLines = lines.slice(1).filter((l) => !/(\+?\s*\d[\d\s()\-]{7,}\d)/.test(l));
-  const address = addressLines.join(', ').replace(/\s+/g, ' ').trim();
-  if (!address) return null;
-  const a = document.createElement('a');
-  a.className = 'alba-footer-action';
-  a.href =
-    'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address);
-  a.target = '_blank';
-  a.rel = 'noopener';
-  const hintTr = 'Haritayı açmak için dokunun';
-  a.innerHTML = `
-    <div class="action-row">
-      <span class="action-icon">📍</span>
-      <span class="action-text">${escapeHtml(title)}</span>
-    </div>
-    <div class="map-address">${escapeHtml(address)}</div>
-    <div class="action-hint alba-blink">${hintTr}</div>
-  `;
   return a;
 }
 
@@ -469,13 +428,12 @@ function injectFooterStyles() {
       line-height: 1;
     }
 
-    /* Optional socials: stack icons vertically under tagline */
+    /* Optional socials */
     .alba-footer-socials {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      gap: 14px;
+      flex-wrap: wrap;
       align-items: center;
-      margin-top: 12px;
     }
 
     /* Mobile */
@@ -537,16 +495,6 @@ function injectFooterStyles() {
       color: #cbd5f5;
       opacity: .75;
       line-height: 1;
-    }
-
-    /* Additional styling for map address lines */
-    .alba-footer-action .map-address {
-      color: #cbd5f5;
-      font-size: 12px;
-      line-height: 1.4;
-      opacity: 0.9;
-      text-align: center;
-      margin-bottom: 6px;
     }
 
     /* Address cards */
@@ -913,8 +861,8 @@ function injectFooterStyles() {
         width:48px;
         height:48px;
         border-radius:999px;
-        background:rgba(15,23,42,.9);
-        border:1px solid rgba(148,163,184,.4);
+        background:rgba(21, 49, 115, 0.9);
+        border:1px solid rgba(87, 132, 195, 0.4);
         color:#e5e7eb;
         font-size:22px;
         transition:transform .15s, box-shadow .15s;
