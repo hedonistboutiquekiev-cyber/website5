@@ -184,49 +184,52 @@ function enhanceFooter(root) {
   const phoneTel = phoneRaw ? phoneRaw.replace(/[^\d+]/g, "") : "";
 
   // Build address buttons (1) and (2)
-  // Remove any existing mailto link in the footer to avoid duplication
-  const mailAnchor = footer.querySelector('a[href^="mailto:"]');
-  if (mailAnchor) mailAnchor.remove();
+  const panel = document.createElement("div");
+  panel.className = "alba-footer-address-panel";
 
-  // Build contact panel with phone and email buttons, followed by address cards.
-  const contactPanel = document.createElement('div');
-  contactPanel.className = 'alba-footer-contact-panel';
+  const b1 = buildAddressButton(merkezBlock);
+  const b2 = buildAddressButton(adanaBlock);
 
-  // Phone action button
-  const phoneBtn = document.createElement('a');
-  phoneBtn.className = 'alba-footer-action';
-  phoneBtn.href = 'tel:+9053877818';
-  phoneBtn.innerHTML = `
-    <div class="action-row">
-      <span class="action-icon">☎</span>
-      <span class="action-text">+90 538 778 18</span>
-    </div>
-    <div class="action-hint alba-blink">Aramak için dokunun</div>
-  `;
-  contactPanel.appendChild(phoneBtn);
+  // If parsing failed, don't destroy the existing footer content
+  if (!b1 && !b2) return;
 
-  // Email action button
-  const emailBtn = document.createElement('a');
-  emailBtn.className = 'alba-footer-action';
-  emailBtn.href = 'mailto:hello@albaspace.com.tr';
-  emailBtn.innerHTML = `
-    <div class="action-row">
-      <span class="action-icon">✉</span>
-      <span class="action-text">hello@albaspace.com.tr</span>
-    </div>
-    <div class="action-hint alba-blink">Bize yazın</div>
-  `;
-  contactPanel.appendChild(emailBtn);
+  if (b1) panel.appendChild(b1);
+  if (b2) panel.appendChild(b2);
 
-  // Address cards
-  const card1 = buildAddressCard(merkezBlock);
-  const card2 = buildAddressCard(adanaBlock);
-  if (card1) contactPanel.appendChild(card1);
-  if (card2) contactPanel.appendChild(card2);
+  addressContainer.innerHTML = "";
+  addressContainer.appendChild(panel);
 
-  // Clear existing addressContainer and insert the new contact panel
-  addressContainer.innerHTML = '';
-  addressContainer.appendChild(contactPanel);
+  // Build square Call button and insert next to logo
+  if (phoneTel) {
+    const logoImg =
+      footer.querySelector('img[src*="logo"]') ||
+      footer.querySelector(".footer-logo img") ||
+      footer.querySelector(".logo img") ||
+      footer.querySelector("img");
+
+    if (logoImg && !footer.querySelector(".alba-call-square")) {
+      const callBtn = document.createElement("a");
+      callBtn.className = "alba-call-square";
+      callBtn.href = `tel:${phoneTel}`;
+      // Initialize with a Turkish call hint; this will be finalized when innerHTML is set below.
+      callBtn.title = "Aramak için dokunun";
+      callBtn.setAttribute("aria-label", "Aramak için dokunun: " + (phoneRaw || ""));
+
+      // Replace generic call label with actual phone number and a Turkish "tap to call" hint.
+      // The hint uses the alba-blink class defined in injectFooterStyles for a subtle blinking effect.
+      const displayNumber = "+90 538 778 18";
+      const callHintTr = "Aramak için dokunun";
+      callBtn.title = callHintTr;
+      callBtn.setAttribute("aria-label", callHintTr + ": " + displayNumber);
+      callBtn.innerHTML = `
+        <div class="alba-call-square__label">${displayNumber}</div>
+        <div class="alba-call-square__sub alba-blink">${callHintTr}</div>
+      `;
+
+      logoImg.insertAdjacentElement("afterend", callBtn);
+      logoImg.style.marginRight = "14px";
+    }
+  }
 }
 
 function buildAddressButton(blockText) {
@@ -287,24 +290,6 @@ function escapeHtml(str) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-// Builds a rectangular address card from the provided text block. Each card displays
-// the title (first line) and the rest of the address inside a stylised box.
-function buildAddressCard(blockText) {
-  if (!blockText) return null;
-  const lines = blockText.split("\n").map((s) => s.trim()).filter(Boolean);
-  if (!lines.length) return null;
-  const title = lines[0];
-  const address = lines.slice(1).join(", ").replace(/\s+/g, " ").trim();
-  if (!address) return null;
-  const card = document.createElement('div');
-  card.className = 'alba-footer-card';
-  card.innerHTML = `
-    <div class="card-title">${escapeHtml(title)}</div>
-    <div class="card-body">${escapeHtml(address)}</div>
-  `;
-  return card;
 }
 
 // ================= FOOTER STYLES =================
@@ -442,85 +427,6 @@ function injectFooterStyles() {
         margin: 12px auto 0;
         max-width: 520px;
       }
-    }
-
-    /* Contact panel and action buttons */
-    .alba-footer-contact-panel {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      margin-top: 20px;
-    }
-    .alba-footer-action {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 14px 20px;
-      border-radius: 16px;
-      background: rgba(15,23,42,.55);
-      border: 1px solid rgba(148,163,184,.28);
-      box-shadow: 0 14px 38px rgba(0,0,0,.35);
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-      text-decoration: none;
-      width: 220px;
-      transition: transform .2s ease, box-shadow .25s ease, border-color .25s ease;
-    }
-    .alba-footer-action:hover {
-      transform: translateY(-2px);
-      border-color: rgba(56,189,248,.7);
-      box-shadow: 0 18px 52px rgba(56,189,248,.12), 0 14px 38px rgba(0,0,0,.45);
-    }
-    .alba-footer-action .action-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-    .alba-footer-action .action-icon {
-      font-size: 18px;
-      color: #38bdf8;
-    }
-    .alba-footer-action .action-text {
-      font-weight: 900;
-      color: #a7f3d0;
-      font-size: 14px;
-      letter-spacing: .04em;
-    }
-    .alba-footer-action .action-hint {
-      font-size: 11px;
-      color: #cbd5f5;
-      opacity: .75;
-      line-height: 1;
-    }
-
-    /* Address cards */
-    .alba-footer-card {
-      width: 100%;
-      max-width: 520px;
-      background: rgba(15,23,42,.55);
-      border: 1px solid rgba(148,163,184,.28);
-      border-radius: 16px;
-      box-shadow: 0 14px 38px rgba(0,0,0,.35);
-      padding: 14px 16px;
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-    }
-    .alba-footer-card .card-title {
-      font-weight: 800;
-      color: #38bdf8;
-      font-size: 14px;
-      margin-bottom: 6px;
-      letter-spacing: .04em;
-    }
-    .alba-footer-card .card-body {
-      color: #cbd5f5;
-      font-size: 13px;
-      line-height: 1.45;
-      opacity: .95;
     }
 
     /* Added subtle blinking animation used for call and map hints */
