@@ -861,8 +861,8 @@ function injectFooterStyles() {
         width:48px;
         height:48px;
         border-radius:999px;
-        background:rgba(15,23,42,.9);
-        border:1px solid rgba(148,163,184,.4);
+        background:rgba(21, 49, 115, 0.9);
+        border:1px solid rgba(87, 132, 195, 0.4);
         color:#e5e7eb;
         font-size:22px;
         transition:transform .15s, box-shadow .15s;
