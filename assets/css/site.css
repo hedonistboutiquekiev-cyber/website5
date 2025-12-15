@@ -467,62 +467,72 @@ footer.footer{
 
 
 /* === GLASS CONTAINERS (GLOBAL) === */
+/* ВАЖНО: НЕ используем section > div — это ломает структуру */
 
-/* основной стеклянный контейнер */
-.glass-container,
-.glass-card,
-.model-container,
-section > div {
-  background: rgba(10, 15, 30, 0.45);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  border-radius: 20px;
-  border: 1px solid rgba(120, 160, 255, 0.18);
-
-  box-shadow:
-    0 0 25px rgba(120, 160, 255, 0.15),
-    inset 0 0 20px rgba(255, 255, 255, 0.03);
-
-  transition: 
-    box-shadow 0.5s ease,
-    transform 0.4s ease;
+:root{
+  --glass-bg: rgba(10, 15, 30, 0.45);
+  --glass-bg-strong: rgba(8, 12, 28, 0.55);
+  --glass-border: rgba(140, 180, 255, 0.22);
+  --glass-glow: rgba(120, 160, 255, 0.28);
+  --glass-radius: 22px;
 }
 
-/* усиление свечения при наведении */
-.glass-container:hover,
-.glass-card:hover,
-.model-container:hover {
+/* Универсальный класс: можно навешивать на любые блоки */
+.glass-container,
+.model-container,
+.model-viewer-wrapper,
+.page-wrapper,
+.hero,
+.card-container{
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+
   box-shadow:
-    0 0 45px rgba(120, 160, 255, 0.35),
-    0 0 90px rgba(80, 120, 255, 0.25),
-    inset 0 0 25px rgba(255, 255, 255, 0.05);
+    0 0 28px var(--glass-glow),
+    inset 0 0 22px rgba(255,255,255,0.04);
+
+  transition: box-shadow .4s ease, transform .35s ease;
+}
+
+/* Лёгкое усиление свечения при наведении */
+.glass-container:hover,
+.model-container:hover,
+.model-viewer-wrapper:hover{
+  box-shadow:
+    0 0 45px rgba(120,160,255,0.45),
+    0 0 95px rgba(80,120,255,0.25),
+    inset 0 0 26px rgba(255,255,255,0.06);
+}
+
+/* Внутренние отступы: чтобы контент не “лип” к краям */
+.page-wrapper,
+.hero,
+.card-container{
+  padding: 22px;
+}
+
+/* Если у .page-wrapper уже есть padding вверху — оставляем твою логику */
+.page-wrapper{
+  text-align:center;
 }
 
 /* === MODEL VIEWER === */
-model-viewer {
+.model-viewer-wrapper{
+  background: var(--glass-bg-strong);
+  padding: 20px;
+}
+
+model-viewer{
   width: 100%;
   height: 100%;
   background: transparent;
 
   border-radius: 18px;
-  box-shadow:
-    0 0 30px rgba(120, 160, 255, 0.35);
+  box-shadow: 0 0 32px rgba(120,160,255,0.35);
 
   --poster-color: transparent;
-}
-
-/* контейнер именно для model-viewer */
-.model-viewer-wrapper {
-  background: rgba(8, 12, 28, 0.55);
-  backdrop-filter: blur(16px);
-
-  border-radius: 22px;
-  padding: 20px;
-
-  border: 1px solid rgba(140, 180, 255, 0.25);
-
-  box-shadow:
-    0 0 40px rgba(120, 160, 255, 0.35),
-    inset 0 0 30px rgba(255, 255, 255, 0.04);
 }
