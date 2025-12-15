@@ -536,3 +536,32 @@ model-viewer{
 
   --poster-color: transparent;
 }
+
+
+/* footer logo block */
+.footer-logo{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+}
+
+/* vertical socials */
+.footer-social.vertical{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:10px;
+}
+
+/* icons size */
+.footer-social.vertical img{
+  width:22px;
+  height:22px;
+  transition:transform .2s, filter .2s;
+}
+
+.footer-social.vertical a:hover img{
+  transform:translateX(2px);
+  filter:brightness(1.25);
+}
