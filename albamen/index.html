@@ -30,6 +30,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Albamen Uzay Keşfi</title>
+    <!-- Load global site styles so header and footer render correctly -->
+    <link rel="stylesheet" href="/assets/css/site.css" />
     <style>
       /* Reset and base styles */
       * {
@@ -505,6 +507,24 @@
         width: 22px;
         height: 22px;
         display: block;
+      }
+      /* Apply a soft glow to key text elements for better readability */
+      .hero h1,
+      .hero p,
+      .section-title h2,
+      .section-title p,
+      .book-section .content h2,
+      .book-section .content p,
+      .timeline-item-content h3,
+      .timeline-item-content p,
+      .planet-section h2,
+      .planet-content h3,
+      .planet-content p,
+      .quote-section blockquote,
+      .quote-section cite,
+      .value-card h3,
+      .value-card p {
+        text-shadow: 0 0 8px rgba(0, 204, 255, 0.6);
       }
 
       /* ---------- AI Agent launcher (placeholder) ---------- */
