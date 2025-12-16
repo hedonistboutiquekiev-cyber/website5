@@ -156,6 +156,14 @@ function enhanceFooter(root) {
   if (!footer || footer.classList.contains("alba-footer-v5")) return;
   footer.classList.add("alba-footer-v5");
 
+  // Remove the large call square on all navigation pages except hizmetler
+  const allowCallSquare = /\/hizmetler(\.html)?\/?$/i.test(
+    window.location.pathname || ""
+  );
+  if (!allowCallSquare) {
+    footer.querySelectorAll(".alba-call-square").forEach((el) => el.remove());
+  }
+
   // Optional: style socials if present
   const socials =
     footer.querySelector(".social-icons") ||
