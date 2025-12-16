@@ -10,6 +10,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
   if (!includes.length) return;
 
+  // Ensure model-viewer is registered; some CDNs may fail to load in certain regions
+  // (the symptom is that <model-viewer> stays an unknown element and renders nothing).
+  const maybeViewer = document.querySelector("model-viewer");
+  if (maybeViewer && !window.customElements.get("model-viewer")) {
+    const fallbackSrc =
+      "https://unpkg.com/@google/model-viewer@3.0.0/dist/model-viewer.min.js";
+    const checkAndInject = () => {
+      if (window.customElements.get("model-viewer")) return;
+      const existing = document.querySelector(
+        `script[src=\"${fallbackSrc}\"]`
+      );
+      if (existing) return;
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = fallbackSrc;
+      document.head.appendChild(script);
+    };
+    // Give the primary CDN a brief window to register before falling back
+    setTimeout(checkAndInject, 1800);
+  }
+
   // ---------------- Mobile nav override ----------------
   if (!document.getElementById("albaspace-nav-override-style")) {
     const navStyle = document.createElement("style");
