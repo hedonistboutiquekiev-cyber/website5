@@ -10,6 +10,11 @@
   // Скрывать строго после полной загрузки (картинки/видео/шрифты)
   window.addEventListener('load', hide, { once: true });
 
+  // Если скрипт загрузился уже после события load, прячем мгновенно
+  if (document.readyState === 'complete') {
+    hide();
+  }
+
   // Страховка: если load почему-то не приходит
   setTimeout(hide, 8000);
 })();
