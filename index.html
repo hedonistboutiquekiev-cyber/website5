@@ -142,15 +142,12 @@
       font-weight: 600;
     }
 
-    /* PAGE WRAPPER – большая «карта» как на скрине */
+    /* PAGE LAYOUT */
 
-    .page-wrapper {
+    .home-main {
       max-width: 1200px;
       margin: 40px auto 70px;
       padding: 32px 26px 40px;
-      background: transparent;
-      border-radius: 0;
-      box-shadow: none;
     }
 
     /* HERO */
@@ -412,7 +409,7 @@
     .carousel-track {
       display: flex;
       gap: 20px;
-      animation: slide-horizontal 40s ease-in-out infinite alternate;
+      animation: slide-horizontal 13.3s ease-in-out infinite alternate;
     }
     .logo-card {
       flex: 0 0 auto;
@@ -443,12 +440,23 @@
   <link rel="stylesheet" href="/assets/css/site.css" />
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
+
+  <style>
+    .home-page .hero,
+    .home-page .card-container {
+      background: none;
+      border: none;
+      box-shadow: none;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  </style>
 </head>
 
-<body>
+<body class="home-page">
   <div data-include="/header-tr.html"></div>
 
-  <div class="page-wrapper">
+  <main class="home-main">
 
     <!-- HERO -->
     <section class="hero">
@@ -566,7 +574,7 @@
       </div>
     </section>
 
-  </div>
+  </main>
 
   <div data-include="/footer-tr.html"></div>
 </body>
