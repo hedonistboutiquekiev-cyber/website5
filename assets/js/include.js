@@ -10,6 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
   if (!includes.length) return;
 
+  // We need the preloader script to run even when the header is injected via
+  // include.js (since scripts inside innerHTML are not executed by default).
+  // After the header fragment is placed into the DOM and the preloader element
+  // exists, load the script once.
+  const ensurePreloaderScript = createPreloaderLoader();
+
   // Ensure model-viewer is registered; some CDNs may fail to load in certain regions
   // (the symptom is that <model-viewer> stays an unknown element and renders nothing).
   const maybeViewer = document.querySelector("model-viewer");
@@ -85,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (url.includes("header-")) {
           markActiveNav();
           setupLangSwitch();
+          ensurePreloaderScript();
         }
 
         if (url.includes("footer-")) {
@@ -94,6 +101,30 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(console.error);
   });
 });
+
+function createPreloaderLoader() {
+  let loaded = false;
+
+  return function ensurePreloaderScript() {
+    if (loaded) return;
+
+    const preloader = document.getElementById("preloader");
+    if (!preloader) return;
+
+    const existing = document.querySelector("script[data-preloader-loader]");
+    if (existing) {
+      loaded = true;
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "/assets/js/preloader.js";
+    script.defer = true;
+    script.dataset.preloaderLoader = "true";
+    document.head.appendChild(script);
+    loaded = true;
+  };
+}
 
 // ================= NAV =================
 function markActiveNav() {
