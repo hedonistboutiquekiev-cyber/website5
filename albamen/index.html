@@ -17,6 +17,12 @@
   details.  When running outside of the full AlbaSpace site, these tweaks
   make the included fragments look as intended without requiring the entire
   global stylesheet.
+
+  Additionally, this version updates the background to match other AlbaSpace
+  pages, removes the reference/partner carousel section, expands the
+  planetary selector to include all eight planets of the Solar System with
+  brief descriptions, and replaces the simple chat bubble with the AI
+  launcher and panel found on the Atlas page.
 -->
 <!DOCTYPE html>
 <html lang="tr">
@@ -33,7 +39,8 @@
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
-        background-color: #0a0f23;
+        /* Use the same background as other pages: dark with star field image */
+        background: #020617 url("/assets/images/space-bg.jpg") center/cover fixed no-repeat;
         color: #ffffff;
         line-height: 1.6;
         overflow-x: hidden;
@@ -59,22 +66,7 @@
         max-width: 1200px;
         margin: 0 auto;
       }
-      /* Starry background using two layered radial gradients */
-      body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: -1;
-        pointer-events: none;
-        background-image: radial-gradient(white 1px, transparent 1px),
-          radial-gradient(white 1px, transparent 1px);
-        background-size: 3px 3px, 7px 7px;
-        background-position: 0 0, 1.5px 1.5px;
-        opacity: 0.15;
-      }
+
       /* Hero section */
       .hero {
         min-height: 80vh;
@@ -403,45 +395,7 @@
         color: #a3b5d3;
         font-size: 0.9rem;
       }
-      /* Chat bubble */
-      .chat-bubble {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        z-index: 1000;
-      }
-      .chat-bubble .label {
-        background: #0a1931;
-        padding: 0.4rem 0.8rem;
-        border-radius: 10px 10px 0 10px;
-        margin-bottom: 0.5rem;
-        color: #ffffff;
-        font-size: 0.8rem;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
-      }
-      .chat-bubble .bubble {
-        display: flex;
-        align-items: center;
-        background: #ffffff;
-        color: #0a1931;
-        border-radius: 20px;
-        padding: 0.5rem 1rem;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-        cursor: pointer;
-      }
-      .chat-bubble .bubble img {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        margin-right: 0.8rem;
-      }
-      .chat-bubble .bubble .text {
-        font-size: 0.9rem;
-        font-weight: 500;
-      }
+
       /* Responsive adjustments */
       @media (max-width: 768px) {
         .timeline::before {
@@ -551,6 +505,92 @@
         width: 22px;
         height: 22px;
         display: block;
+      }
+
+      /* ---------- AI Agent launcher (placeholder) ---------- */
+      .ai-launcher-btn{
+        position:fixed;
+        right:18px;
+        bottom:18px;
+        z-index:9998;
+        display:inline-flex;
+        align-items:center;
+        gap:10px;
+        padding:12px 14px;
+        border-radius:999px;
+        border:1px solid rgba(255,255,255,0.18);
+        background:rgba(2,6,23,0.72);
+        color:#e5e7eb;
+        backdrop-filter:blur(10px);
+        box-shadow:0 18px 50px rgba(0,0,0,0.65);
+        cursor:pointer;
+        user-select:none;
+        transition:transform .15s ease, filter .15s ease;
+        font-size:13px;
+        letter-spacing:.03em;
+      }
+      .ai-launcher-btn:hover{ transform:translateY(-2px); filter:brightness(1.06); }
+      .ai-dot{
+        width:10px;height:10px;border-radius:999px;
+        background:linear-gradient(135deg,#00c2ff,#22c55e);
+        box-shadow:0 0 18px rgba(56,189,248,0.65);
+      }
+      .ai-panel{
+        position:fixed;
+        right:18px;
+        bottom:74px;
+        width:min(420px, calc(100vw - 36px));
+        height:520px;
+        z-index:9999;
+        display:none;
+        border-radius:18px;
+        overflow:hidden;
+        border:1px solid rgba(148,163,184,0.35);
+        background:rgba(2,6,23,0.92);
+        backdrop-filter:blur(12px);
+        box-shadow:0 24px 70px rgba(0,0,0,0.8);
+      }
+      .ai-panel.open{ display:block; }
+      .ai-panel-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:10px 12px;
+        background:linear-gradient(90deg, rgba(56,189,248,0.18), rgba(34,197,94,0.10), rgba(56,189,248,0.18));
+        border-bottom:1px solid rgba(148,163,184,0.22);
+        color:#e5e7eb;
+        font-size:13px;
+      }
+      .ai-panel-header strong{ font-weight:650; letter-spacing:.02em; }
+      .ai-close{
+        border:none;
+        background:rgba(2,6,23,0.55);
+        color:#e5e7eb;
+        border:1px solid rgba(255,255,255,0.14);
+        border-radius:999px;
+        width:32px;height:32px;
+        cursor:pointer;
+        font-size:18px;
+        line-height:1;
+      }
+      .ai-panel-body{
+        height:calc(100% - 52px);
+        padding:14px;
+        color:#e5e7eb;
+        font-size:13px;
+      }
+      .ai-placeholder{
+        height:100%;
+        border-radius:14px;
+        border:1px dashed rgba(148,163,184,0.35);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:18px;
+        background:rgba(15,23,42,0.55);
+        line-height:1.5;
+        color:#cbd5f5;
       }
     </style>
   </head>
@@ -680,49 +720,21 @@
     <section class="planet-section container">
       <h2>Gezegeni Seç</h2>
       <div class="planets-list">
-        <div class="planet active" data-planet="earth" style="background: #2f80ed;"></div>
+        <div class="planet active" data-planet="mercury" style="background: #9b5de5;"></div>
+        <div class="planet" data-planet="venus" style="background: #f72585;"></div>
+        <div class="planet" data-planet="earth" style="background: #2f80ed;"></div>
         <div class="planet" data-planet="mars" style="background: #e94e77;"></div>
         <div class="planet" data-planet="jupiter" style="background: #f2994a;"></div>
-        <div class="planet" data-planet="venus" style="background: #bb6bd9;"></div>
         <div class="planet" data-planet="saturn" style="background: #f2c94c;"></div>
+        <div class="planet" data-planet="uranus" style="background: #00b4d8;"></div>
+        <div class="planet" data-planet="neptune" style="background: #4bb3fd;"></div>
       </div>
       <div class="planet-content" id="planetContent">
-        <h3>Dünya</h3>
+        <h3>Merkür</h3>
         <p>
-          Dünya, Güneş'e olan yaklaşık 150 milyon km uzaklığı ve yaşam için
-          ideal koşullarıyla insanlığın evi.
+          Güneş'e en yakın gezegen olan Merkür, küçük ve yoğun bir kayaç gök cismidir.
         </p>
         <button class="btn">Sesli Dinle</button>
-      </div>
-    </section>
-
-    <!-- References and partners section -->
-    <section class="references container">
-      <h2 class="logo-section-title">Referanslarımız</h2>
-      <div class="logo-carousel">
-        <div class="carousel-track">
-          <!-- Add your reference logos here; placeholder text used for demonstration -->
-          <div class="logo-card">Logo 1</div>
-          <div class="logo-card">Logo 2</div>
-          <div class="logo-card">Logo 3</div>
-          <div class="logo-card">Logo 4</div>
-          <div class="logo-card">Logo 5</div>
-          <div class="logo-card">Logo 6</div>
-          <div class="logo-card">Logo 7</div>
-          <div class="logo-card">Logo 8</div>
-        </div>
-      </div>
-      <h2 class="logo-section-title">Çözüm Ortaklarımız</h2>
-      <div class="logo-carousel">
-        <div class="carousel-track">
-          <!-- Add your partner logos here -->
-          <div class="logo-card">Partner 1</div>
-          <div class="logo-card">Partner 2</div>
-          <div class="logo-card">Partner 3</div>
-          <div class="logo-card">Partner 4</div>
-          <div class="logo-card">Partner 5</div>
-          <div class="logo-card">Partner 6</div>
-        </div>
       </div>
     </section>
 
@@ -752,16 +764,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Chat bubble placeholder -->
-    <div class="chat-bubble">
-      <div class="label">Albamen ai</div>
-      <div class="bubble">
-        <!-- Re‑use the child astronaut image as a placeholder avatar -->
-        <img src="assets/images/child-astronaut.png" alt="Albamen" />
-        <div class="text">Uçmaya Hazırsın?</div>
-      </div>
-    </div>
 
     <!-- Footer include placeholder -->
     <div data-include-html="../footer-tr.html"></div>
@@ -818,6 +820,16 @@
       // Planet selection logic
       document.addEventListener("DOMContentLoaded", function () {
         const planets = {
+          mercury: {
+            title: "Merkür",
+            text:
+              "Güneş'e en yakın gezegen olan Merkür, küçük ve yoğun bir kayaç gök cismidir.",
+          },
+          venus: {
+            title: "Venüs",
+            text:
+              "Venüs, yoğun atmosferi ve sıcak yüzeyiyle 'ikiz' gezegenimiz olarak bilinir.",
+          },
           earth: {
             title: "Dünya",
             text:
@@ -833,15 +845,20 @@
             text:
               "Güneş Sistemi'nin en büyük gezegeni olan Jüpiter, dev gaz yapısıyla dikkat çeker.",
           },
-          venus: {
-            title: "Venüs",
-            text:
-              "Venüs, yoğun atmosferi ve sıcak yüzeyiyle 'ikiz' gezegenimiz olarak bilinir.",
-          },
           saturn: {
             title: "Satürn",
             text:
               "Benzersiz halkalarıyla ünlü Satürn, gaz devi gezegenler arasında yer alır.",
+          },
+          uranus: {
+            title: "Uranüs",
+            text:
+              "Uranüs, eğik eksen eğimi ve mavi-yeşil rengiyle bilinen buz devi bir gezegendir.",
+          },
+          neptune: {
+            title: "Neptün",
+            text:
+              "Neptün, Güneş Sistemi'nin en dış gezegenidir ve rüzgarlı, derin mavi atmosferiyle dikkat çeker.",
           },
         };
         const planetEls = document.querySelectorAll(".planet");
@@ -851,12 +868,49 @@
             planetEls.forEach((p) => p.classList.remove("active"));
             el.classList.add("active");
             const key = el.getAttribute("data-planet");
-            const info = planets[key] || planets.earth;
+            const info = planets[key] || planets.mercury;
             planetContent.querySelector("h3").textContent = info.title;
             planetContent.querySelector("p").textContent = info.text;
           });
         });
       });
     </script>
+
+    <!-- AI Agent (placeholder) -->
+    <button class="ai-launcher-btn" id="aiLauncherBtn" type="button" aria-haspopup="dialog" aria-controls="aiPanel">
+      <span class="ai-dot" aria-hidden="true"></span>
+      AI Agent
+    </button>
+
+    <div class="ai-panel" id="aiPanel" role="dialog" aria-modal="true" aria-label="AI Agent">
+      <div class="ai-panel-header">
+        <strong>AI Agent</strong>
+        <button class="ai-close" id="aiCloseBtn" type="button" aria-label="Kapat">&times;</button>
+      </div>
+      <div class="ai-panel-body">
+        <div class="ai-placeholder">
+          Buraya AI widget gelecek.<br>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        const btn = document.getElementById('aiLauncherBtn');
+        const panel = document.getElementById('aiPanel');
+        const close = document.getElementById('aiCloseBtn');
+        if(!btn || !panel || !close) return;
+
+        function openPanel(){ panel.classList.add('open'); document.body.style.overflow='hidden'; }
+        function closePanel(){ panel.classList.remove('open'); document.body.style.overflow=''; }
+
+        btn.addEventListener('click', () => panel.classList.contains('open') ? closePanel() : openPanel());
+        close.addEventListener('click', closePanel);
+        document.addEventListener('keydown', (e) => {
+          if(e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+        });
+      })();
+    </script>
+
   </body>
 </html>
