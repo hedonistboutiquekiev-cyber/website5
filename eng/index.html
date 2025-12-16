@@ -11,9 +11,9 @@
     :root {
       --header-bg: #020617;
       --accent: #00c2ff;
-      --page-bg: #ffffff;
-      --text-main: #111827;
-      --text-muted: #4b5563;
+      --page-bg: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
     }
     * {
       margin: 0;
@@ -22,7 +22,7 @@
     }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--page-bg);
+      background: #020617 url("/assets/images/space-bg.jpg") center/cover fixed no-repeat;
       color: var(--text-main);
     }
     .header-logo {
@@ -248,11 +248,11 @@
       flex: 0 0 auto;
       width: 100px;
       height: 100px;
-      background: #f5f5f5;
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 0;
       overflow: hidden;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      border: none;
+      box-shadow: none;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -279,7 +279,7 @@
   <!-- Include the translated header -->
   <div data-include="/header-en.html"></div>
 
-  <div class="page-wrapper">
+  <div class="page-wrapper" style="background: transparent; box-shadow: none; border-radius: 0;">
     <!-- HERO -->
     <section class="hero">
       <div>
