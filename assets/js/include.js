@@ -10,6 +10,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
   if (!includes.length) return;
 
+  // Ensure model-viewer is registered; some CDNs may fail to load in certain regions
+  // (the symptom is that <model-viewer> stays an unknown element and renders nothing).
+  const maybeViewer = document.querySelector("model-viewer");
+  if (maybeViewer && !window.customElements.get("model-viewer")) {
+    const fallbackSrc =
+      "https://unpkg.com/@google/model-viewer@3.0.0/dist/model-viewer.min.js";
+    const checkAndInject = () => {
+      if (window.customElements.get("model-viewer")) return;
+      const existing = document.querySelector(
+        `script[src=\"${fallbackSrc}\"]`
+      );
+      if (existing) return;
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = fallbackSrc;
+      document.head.appendChild(script);
+    };
+    // Give the primary CDN a brief window to register before falling back
+    setTimeout(checkAndInject, 1800);
+  }
+
   // ---------------- Mobile nav override ----------------
   if (!document.getElementById("albaspace-nav-override-style")) {
     const navStyle = document.createElement("style");
@@ -155,6 +176,14 @@ function enhanceFooter(root) {
   const footer = root.querySelector("footer");
   if (!footer || footer.classList.contains("alba-footer-v5")) return;
   footer.classList.add("alba-footer-v5");
+
+  // Remove the large call square on all navigation pages except hizmetler
+  const allowCallSquare = /\/hizmetler(\.html)?\/?$/i.test(
+    window.location.pathname || ""
+  );
+  if (!allowCallSquare) {
+    footer.querySelectorAll(".alba-call-square").forEach((el) => el.remove());
+  }
 
   // Optional: style socials if present
   const socials =

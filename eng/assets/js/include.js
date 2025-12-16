@@ -11,6 +11,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const includes = document.querySelectorAll("[data-include]");
   if (!includes.length) return;
 
+  // Ensure model-viewer registers even if the primary CDN fails to load
+  // (otherwise the custom element stays unknown and the model stays hidden).
+  const maybeViewer = document.querySelector("model-viewer");
+  if (maybeViewer && !window.customElements.get("model-viewer")) {
+    const fallbackSrc =
+      "https://unpkg.com/@google/model-viewer@3.0.0/dist/model-viewer.min.js";
+    const checkAndInject = () => {
+      if (window.customElements.get("model-viewer")) return;
+      const existing = document.querySelector(
+        `script[src=\"${fallbackSrc}\"]`
+      );
+      if (existing) return;
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = fallbackSrc;
+      document.head.appendChild(script);
+    };
+    setTimeout(checkAndInject, 1800);
+  }
+
   // Inject mobile navigation override to ensure burger menu functions correctly on pages
   // that define nav.main-nav with higher specificity (e.g. many /eng/ pages). This
   // rule hides nav by default on small screens and displays it only when nav-open is set.
