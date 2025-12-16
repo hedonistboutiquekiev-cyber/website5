@@ -575,126 +575,40 @@ model-viewer{
   filter:brightness(1.25);
 }
 
-
-/* === Footer social: square + 3x bigger === */
-.footer .footer-social a {
-  width: 66px;               /* было ~22px */
-  height: 66px;
-  border-radius: 12px;       /* квадрат с мягкими углами */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-  transition: transform .15s ease, filter .15s ease;
+/* PRELOADER (global) */
+.preloader{
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.85);
+  backdrop-filter: blur(8px);
+  transition: opacity .35s ease, visibility .35s ease;
 }
 
-.footer .footer-social a:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.08);
+.preloader.is-hidden{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.footer .footer-social a img,
-.footer .footer-social a svg {
-  width: 34px;               /* чтобы внутри не растягивалось на весь квадрат */
-  height: 34px;
-  display: block;
+.preloader__core{ text-align:center; }
+.preloader__ring{
+  width: 86px; height: 86px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,.15);
+  border-top-color: rgba(130,73,223,.9);
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 30px rgba(130,73,223,.35);
+  margin: 0 auto 14px;
 }
 
-
-.footer .footer-contact .contact-item a {
-  display: block;
-  padding: 14px 16px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-  text-decoration: none;
-}
-.footer .footer-contact .contact-item a:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
+.preloader__text{
+  font: 600 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.75);
 }
 
-
-/* =========================================================
-   GLOBAL FOOTER FIXES (ALL PAGES)
-   1) Make footer social icons containers square + 3x bigger
-   2) Force contact links (tel/mail/address) to look like buttons
-   ========================================================= */
-
-/* 1) Social icons: square containers + ~3x bigger */
-.footer .footer-social a{
-  width: 66px;
-  height: 66px;
-  border-radius: 12px;              /* square-ish, not round */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-
-  transition: transform .15s ease, filter .15s ease;
-}
-
-.footer .footer-social a:hover{
-  transform: translateY(-2px);
-  filter: brightness(1.08);
-}
-
-/* icon inside the square container */
-.footer .footer-social a img,
-.footer .footer-social a svg{
-  width: 34px;
-  height: 34px;
-  display: block;
-  object-fit: contain;
-}
-
-/* If you have vertical layout, keep spacing nice */
-.footer .footer-social.vertical{
-  gap: 10px;
-}
-
-/* 2) Contact items as “buttons” (tel/mail/address) */
-.footer .footer-contact .contact-item a,
-.footer .footer-contact .contact-link{
-  display: block;
-  padding: 14px 16px;
-  border-radius: 14px;
-
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-
-  text-decoration: none;
-  color: inherit;
-
-  transition: transform .15s ease, filter .15s ease;
-}
-
-.footer .footer-contact .contact-item a:hover,
-.footer .footer-contact .contact-link:hover{
-  transform: translateY(-1px);
-  filter: brightness(1.08);
-}
-
-/* Labels/values */
-.footer .footer-contact .contact-label{
-  display: inline-block;
-  font-weight: 600;
-  color: #8be9ff;
-  margin-bottom: 2px;
-}
-
-.footer .footer-contact .contact-value{
-  color: rgba(255,255,255,0.9);
-}
-
-/* Optional: make address links not look different */
-.footer .footer-contact .address-link{
-  cursor: pointer;
-}
+@keyframes spin { to { transform: rotate(360deg); } }
