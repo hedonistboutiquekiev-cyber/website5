@@ -142,15 +142,12 @@
       font-weight: 600;
     }
 
-    /* PAGE WRAPPER – большая «карта» как на скрине */
+    /* PAGE LAYOUT */
 
-    .page-wrapper {
+    .home-main {
       max-width: 1200px;
       margin: 40px auto 70px;
       padding: 32px 26px 40px;
-      background: radial-gradient(circle at top, #020b1f 0%, #020617 60%, #020617 100%);
-      border-radius: 32px;
-      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.9), 0 0 40px rgba(15, 23, 42, 0.9);
     }
 
     /* HERO */
@@ -412,17 +409,17 @@
     .carousel-track {
       display: flex;
       gap: 20px;
-      animation: slide-horizontal 40s ease-in-out infinite alternate;
+      animation: slide-horizontal 13.3s ease-in-out infinite alternate;
     }
     .logo-card {
       flex: 0 0 auto;
       width: 100px;
       height: 100px;
-      background: radial-gradient(circle at top, #020b1f 0%, #020617 45%, #020617 100%);
-      border-radius: 16px;
+      background: transparent;
+      border-radius: 0;
       overflow: hidden;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      border: none;
+      box-shadow: none;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -443,12 +440,23 @@
   <link rel="stylesheet" href="/assets/css/site.css" />
   <script src="/assets/js/include.js" defer></script>
   <script src="/assets/js/menu-toggle.js" defer></script>
+
+  <style>
+    .home-page .hero,
+    .home-page .card-container {
+      background: none;
+      border: none;
+      box-shadow: none;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  </style>
 </head>
 
-<body>
+<body class="home-page">
   <div data-include="/header-tr.html"></div>
 
-  <div class="page-wrapper">
+  <main class="home-main">
 
     <!-- HERO -->
     <section class="hero">
@@ -566,7 +574,7 @@
       </div>
     </section>
 
-  </div>
+  </main>
 
   <div data-include="/footer-tr.html"></div>
 </body>
